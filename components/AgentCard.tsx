@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { motion, useScroll, useMotionValueEvent, AnimatePresence } from 'framer-motion';
 import { Phone, Calendar, ArrowRight } from 'lucide-react';
+import { useModal } from '../context/ModalContext';
 
 const AgentCard: React.FC = () => {
   const { scrollY } = useScroll();
   const [isVisible, setIsVisible] = useState(false);
+  const { openModal } = useModal();
 
   useMotionValueEvent(scrollY, "change", (latest) => {
     // Show after scrolling past the hero section (approx 500px)
@@ -28,9 +30,9 @@ const AgentCard: React.FC = () => {
           {/* Agent Profile */}
           <div className="flex items-center gap-4 border-r border-gray-700 pr-6">
             <div className="relative">
-              <img 
-                src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=200&auto=format&fit=crop" 
-                alt="Elena Fisher" 
+              <img
+                src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=200&auto=format&fit=crop"
+                alt="Elena Fisher"
                 className="w-12 h-12 rounded-full object-cover border border-gray-600"
               />
               <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-luxury-black"></div>
@@ -47,10 +49,11 @@ const AgentCard: React.FC = () => {
               <Phone size={14} />
               <span>WhatsApp</span>
             </button>
-            
-            <motion.button 
+
+            <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
+              onClick={openModal}
               className="flex items-center gap-2 px-6 py-3 bg-white text-luxury-black rounded-sm text-xs font-sans font-bold uppercase tracking-wider hover:bg-gray-200 transition-colors"
             >
               <span>Schedule Viewing</span>

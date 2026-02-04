@@ -24,9 +24,13 @@ const FilterOption: React.FC<FilterOptionProps> = ({ label, value, hasBorder = t
   </div>
 );
 
-const FloatingFilter: React.FC = () => {
+interface FloatingFilterProps {
+  onSearch?: () => void;
+}
+
+const FloatingFilter: React.FC<FloatingFilterProps> = ({ onSearch }) => {
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 1.5, duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
@@ -36,13 +40,16 @@ const FloatingFilter: React.FC = () => {
         <FilterOption label="Location" value="New York, NY" />
         <FilterOption label="Property Type" value="Penthouse" />
         <FilterOption label="Price Range" value="Any Price" hasBorder={false} />
-        
-        <button className="bg-luxury-black text-white px-10 py-8 hover:bg-gray-800 transition-all duration-300 flex items-center justify-center group md:w-auto w-full">
+
+        <button
+          onClick={onSearch}
+          className="bg-luxury-black text-white px-10 py-8 hover:bg-gray-800 transition-all duration-300 flex items-center justify-center group md:w-auto w-full"
+        >
           <motion.div
             whileHover={{ x: 5 }}
             transition={{ type: "spring", stiffness: 400, damping: 10 }}
           >
-             <ArrowRight size={24} strokeWidth={1} />
+            <ArrowRight size={24} strokeWidth={1} />
           </motion.div>
         </button>
       </div>

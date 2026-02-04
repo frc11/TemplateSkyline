@@ -1,0 +1,72 @@
+import React from 'react';
+import { motion } from 'framer-motion';
+import Hero from '../components/Hero';
+import FloatingFilter from '../components/Search/FloatingFilter';
+import Properties from '../components/Properties';
+import InteractiveDetail from '../components/InteractiveDetail';
+import EditorialGallery from '../components/EditorialGallery';
+import PanoramaViewer from '../components/PanoramaViewer';
+
+const Home: React.FC = () => {
+    return (
+        <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+        >
+            {/* Hero Section */}
+            <Hero />
+
+            {/* Floating Search Filter - Overlaps Hero and Content */}
+            <FloatingFilter
+                onSearch={() => {
+                    const element = document.getElementById('properties');
+                    element?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }}
+            />
+
+            {/* Main Content */}
+            <Properties />
+
+            {/* Interactive Materiality Section */}
+            <InteractiveDetail />
+
+            {/* Editorial Gallery */}
+            <EditorialGallery />
+
+            {/* 360 Panorama View */}
+            <PanoramaViewer />
+
+            {/* Footer */}
+            <footer className="bg-gray-50 py-24 px-12 md:px-24 border-t border-gray-200 relative z-10">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
+                    <div className="space-y-6">
+                        <h4 className="font-sans uppercase tracking-architect text-xs font-bold">Contact</h4>
+                        <p className="font-serif text-gray-500 text-sm">
+                            New York, NY<br />
+                            +1 (555) 000-0000<br />
+                            hello@skyline.estates
+                        </p>
+                    </div>
+                    <div className="space-y-6">
+                        <h4 className="font-sans uppercase tracking-architect text-xs font-bold">Social</h4>
+                        <div className="flex flex-col space-y-2 font-serif text-gray-500 text-sm">
+                            <a href="#" className="hover:text-black transition-colors">Instagram</a>
+                            <a href="#" className="hover:text-black transition-colors">LinkedIn</a>
+                            <a href="#" className="hover:text-black transition-colors">Pinterest</a>
+                        </div>
+                    </div>
+                    <div className="md:col-span-2 text-right flex flex-col justify-between">
+                        <h2 className="text-4xl font-sans uppercase tracking-widest opacity-10">Skyline</h2>
+                        <p className="text-[10px] uppercase tracking-widest text-gray-400 mt-auto">
+                            © 2024 Skyline Estates. All rights reserved.
+                        </p>
+                    </div>
+                </div>
+            </footer>
+        </motion.div>
+    );
+};
+
+export default Home;
