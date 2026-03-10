@@ -1,7 +1,8 @@
 import { GoogleGenAI } from "@google/genai";
 import { PROPERTIES } from "../data/properties";
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+const API_KEY = process.env.API_KEY || "AI_KEY_PLACEHOLDER";
+const ai = new GoogleGenAI({ apiKey: API_KEY });
 
 const propertiesInfo = PROPERTIES.map((p, index) =>
   `(${index + 1}) ${p.title} (${p.location}) - ${p.price} - ${p.description} [Details: ${p.beds} Beds, ${p.baths} Baths, ${p.sqft} sqft]`
