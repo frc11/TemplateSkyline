@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Building2, Search, ArrowRight } from 'lucide-react';
+import { Building2, Mail, ArrowRight, Home, Users, BookOpen, MapPin, Phone, Instagram, Linkedin, Facebook, Share2 } from 'lucide-react';
 import { useModal } from '../../context/ModalContext';
 
 import { Link, useSearchParams, useLocation } from 'react-router-dom';
@@ -13,6 +13,7 @@ interface SubItem {
 interface MenuItem {
   id: string;
   label: string;
+  icon: React.ReactNode;
   subItems: SubItem[];
 }
 
@@ -20,6 +21,7 @@ const MENU_ITEMS: MenuItem[] = [
   {
     id: 'properties',
     label: 'Properties',
+    icon: <Home size={20} strokeWidth={1.5} />,
     subItems: [
       { label: 'Buy', path: '/?mode=sale' },
       { label: 'Rent', path: '/?mode=rent' },
@@ -30,6 +32,7 @@ const MENU_ITEMS: MenuItem[] = [
   {
     id: 'agents',
     label: 'Agents',
+    icon: <Users size={20} strokeWidth={1.5} />,
     subItems: [
       { label: 'Find an Agent', path: '/agents' },
       { label: 'Careers', path: '/agents' }, // Placeholder
@@ -39,6 +42,7 @@ const MENU_ITEMS: MenuItem[] = [
   {
     id: 'journal',
     label: 'Journal',
+    icon: <BookOpen size={20} strokeWidth={1.5} />,
     subItems: [
       { label: 'Architecture', path: '/journal?cat=Architecture' },
       { label: 'Interior Design', path: '/journal?cat=Interior Design' },
@@ -50,6 +54,7 @@ const MENU_ITEMS: MenuItem[] = [
 
 const Sidebar: React.FC = () => {
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const { openModal } = useModal();
   const [searchParams] = useSearchParams();
   const location = useLocation();
@@ -83,72 +88,82 @@ const Sidebar: React.FC = () => {
     return false;
   };
 
+  const handleMouseEnter = (id: string) => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+    setActiveMenu(id);
+  };
+
+  const handleMouseLeave = () => {
+    timeoutRef.current = setTimeout(() => {
+      setActiveMenu(null);
+    }, 400); // 400ms delay to allow moving perfectly diagonally
+  };
+
   return (
-    <aside className="fixed left-0 top-0 h-screen w-20 bg-white border-r border-gray-100 z-50 flex flex-col justify-between items-center py-12 font-sans">
+    <aside
+      className="group/sidebar fixed left-0 top-0 h-screen w-16 hover:w-72 bg-white/95 backdrop-blur-md border-r border-gray-100 z-50 flex flex-col justify-between items-start py-8 font-sans transition-all duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] shadow-[4px_0_24px_rgba(0,0,0,0.02)]"
+      onMouseLeave={() => {
+        if (timeoutRef.current) clearTimeout(timeoutRef.current);
+        setActiveMenu(null);
+      }}
+    >
       {/* Logo */}
-      <div className="text-luxury-black hover:opacity-50 transition-opacity cursor-pointer">
-        <Building2 strokeWidth={1} size={28} />
+      <div className="flex items-center px-4 w-full cursor-pointer group/logo">
+        <div className="w-8 flex justify-center shrink-0">
+          <Building2 strokeWidth={1} size={24} className="text-luxury-black group-hover/logo:opacity-50 transition-opacity" />
+        </div>
+        <span className="ml-4 font-serif text-lg tracking-widest text-luxury-black opacity-0 group-hover/sidebar:opacity-100 transition-opacity duration-300 whitespace-nowrap overflow-hidden">
+          SKYLINE
+        </span>
       </div>
 
       {/* Navigation */}
-      <nav className="flex flex-col gap-16 items-center justify-center flex-1">
+      <nav className="flex flex-col gap-2 w-full mt-24 flex-1 justify-start">
         {MENU_ITEMS.map((item) => (
           <div
             key={item.id}
-            className="relative group flex items-center justify-center w-full"
-            onMouseEnter={() => setActiveMenu(item.id)}
-            onMouseLeave={() => setActiveMenu(null)}
+            className="flex flex-col w-full relative z-10"
+            onMouseEnter={() => handleMouseEnter(item.id)}
           >
-            {/* Vertical Text (Default State) */}
-            <div className="h-24 w-8 flex items-center justify-center cursor-pointer">
-              <span
-                className="block -rotate-90 whitespace-nowrap text-xs font-bold uppercase tracking-architect text-gray-400 group-hover:text-luxury-black transition-colors duration-300"
-                style={{ writingMode: 'vertical-rl' }}
-              >
+            {/* The Icon & Text */}
+            <div className="flex items-center w-full px-4 cursor-pointer group/navitem py-3 transition-colors hover:bg-gray-50/80 rounded-r-full mr-2">
+              <div className="w-8 h-8 flex justify-center items-center shrink-0 text-gray-400 group-hover/navitem:text-luxury-black transition-colors duration-300">
+                {item.icon}
+              </div>
+
+              {/* The Text - Only visible when aside is hovered */}
+              <span className="ml-4 font-sans text-[11px] font-bold uppercase tracking-[0.2em] text-gray-400 group-hover/navitem:text-luxury-black transition-colors duration-300 whitespace-nowrap opacity-0 group-hover/sidebar:opacity-100 overflow-hidden w-0 group-hover/sidebar:w-auto mt-[2px]">
                 {item.label}
               </span>
             </div>
 
-            {/* Hover Submenu / Horizontal State */}
+            {/* Hover Submenu / Accordion State */}
             <AnimatePresence>
               {activeMenu === item.id && (
                 <motion.div
-                  initial={{ opacity: 0, x: -10, scale: 0.95 }}
-                  animate={{ opacity: 1, x: 5, scale: 1 }}
-                  exit={{ opacity: 0, x: -10, scale: 0.95 }}
-                  transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                  className="absolute left-full top-1/2 -translate-y-1/2 ml-4 w-64 bg-white shadow-2xl border border-gray-100 p-8 cursor-default"
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: "auto", opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.3, ease: "easeInOut" }}
+                  className="overflow-hidden w-full"
                 >
-                  <motion.h3
-                    layoutId={`title-${item.id}`}
-                    className="font-sans text-xl font-light uppercase tracking-widest text-luxury-black mb-6 border-b border-gray-100 pb-4"
-                  >
-                    {item.label}
-                  </motion.h3>
-
-                  <ul className="space-y-4">
+                  <ul className="pl-16 pr-4 pb-4 pt-1 space-y-4 opacity-0 group-hover/sidebar:opacity-100 transition-opacity duration-300 whitespace-nowrap">
                     {item.subItems.map((sub, idx) => (
                       <li key={sub.label}>
                         <Link
                           to={sub.path}
                           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-                          className={`font-serif text-sm cursor-pointer flex items-center group/item transition-colors ${isSubItemActive(sub.path)
+                          className={`font-serif text-[13px] cursor-pointer flex items-center group/item transition-all duration-300 origin-left hover:translate-x-1 ${isSubItemActive(sub.path)
                             ? 'text-luxury-black font-semibold'
-                            : 'text-gray-500 hover:text-luxury-black'
+                            : 'text-gray-400 hover:text-luxury-black'
                             }`}
                         >
-                          <motion.span
-                            initial={{ opacity: 0, x: -10 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: 0.1 + idx * 0.05 }}
-                            className="flex items-center w-full"
-                          >
-                            <span className={`overflow-hidden transition-all duration-300 ${isSubItemActive(sub.path) ? 'w-4' : 'w-0 group-hover/item:w-4'
-                              }`}>
-                              <ArrowRight size={12} className="mr-2" />
-                            </span>
-                            {sub.label}
-                          </motion.span>
+                          <span className={`overflow-hidden transition-all duration-300 flex items-center ${isSubItemActive(sub.path) ? 'w-4 opacity-100' : 'w-0 opacity-0 group-hover/item:w-4 group-hover/item:opacity-100'}`}>
+                            <ArrowRight size={12} className="mr-2 shrink-0" />
+                          </span>
+                          {sub.label}
                         </Link>
                       </li>
                     ))}
@@ -160,13 +175,60 @@ const Sidebar: React.FC = () => {
         ))}
       </nav>
 
-      {/* Bottom Search */}
-      <button
-        onClick={openModal}
-        className="w-12 h-12 flex items-center justify-center text-luxury-black hover:bg-gray-50 rounded-full transition-colors"
-      >
-        <Search strokeWidth={1} size={24} />
-      </button>
+      {/* Bottom Contact Info */}
+      <div className="flex flex-col w-full mt-auto mb-4 border-t border-gray-100 pt-4">
+
+        {/* Phone */}
+        <a href="tel:+543811234567" className="flex items-center w-full px-4 cursor-pointer group/contactitem py-3 transition-colors hover:bg-gray-50/80 rounded-r-full mr-2">
+          <div className="w-8 h-8 flex justify-center items-center shrink-0 text-gray-400 group-hover/contactitem:text-luxury-black transition-colors duration-300">
+            <Phone size={18} strokeWidth={1.5} />
+          </div>
+          <span className="ml-4 font-sans text-[11px] font-bold uppercase tracking-[0.2em] text-gray-400 group-hover/contactitem:text-luxury-black transition-colors duration-300 whitespace-nowrap opacity-0 group-hover/sidebar:opacity-100 overflow-hidden w-0 group-hover/sidebar:w-auto mt-[2px]">
+            +54 381 123-4567
+          </span>
+        </a>
+
+        {/* Location */}
+        <a
+          href="https://maps.google.com/?q=San+Miguel+de+Tucuman"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center w-full px-4 cursor-pointer group/contactitem py-3 transition-colors hover:bg-gray-50/80 rounded-r-full mr-2"
+        >
+          <div className="w-8 h-8 flex justify-center items-center shrink-0 text-gray-400 group-hover/contactitem:text-luxury-black transition-colors duration-300">
+            <MapPin size={18} strokeWidth={1.5} />
+          </div>
+          <span className="ml-4 font-sans text-[11px] font-bold uppercase tracking-[0.2em] text-gray-400 group-hover/contactitem:text-luxury-black transition-colors duration-300 whitespace-nowrap opacity-0 group-hover/sidebar:opacity-100 overflow-hidden w-0 group-hover/sidebar:w-auto mt-[2px]">
+            Tucumán, ARG
+          </span>
+        </a>
+
+        {/* Socials */}
+        <div className="flex items-center w-full px-4 group/contactitem py-3 transition-colors hover:bg-gray-50/80 rounded-r-full mr-2">
+          <div className="w-8 h-8 flex justify-center items-center shrink-0 text-gray-400 group-hover/contactitem:text-luxury-black transition-colors duration-300">
+            <Share2 size={18} strokeWidth={1.5} />
+          </div>
+          <div className="ml-4 flex items-center gap-6 opacity-0 group-hover/sidebar:opacity-100 transition-opacity duration-300 overflow-hidden w-0 group-hover/sidebar:w-auto pl-1">
+            <a href="#" className="text-gray-400 hover:text-luxury-black hover:scale-110 transition-all duration-300"><Instagram size={16} /></a>
+            <a href="#" className="text-gray-400 hover:text-luxury-black hover:scale-110 transition-all duration-300"><Linkedin size={16} /></a>
+            <a href="#" className="text-gray-400 hover:text-luxury-black hover:scale-110 transition-all duration-300"><Facebook size={16} /></a>
+          </div>
+        </div>
+
+        {/* Contact Action */}
+        <div
+          onClick={openModal}
+          className="flex items-center w-full px-4 cursor-pointer group/contactitem py-3 transition-colors hover:bg-gray-50/80 mt-2 border-t border-gray-50 pt-3"
+        >
+          <div className="w-8 h-8 flex justify-center items-center shrink-0 text-gray-400 group-hover/contactitem:text-luxury-black transition-colors duration-300">
+            <Mail size={18} strokeWidth={1.5} />
+          </div>
+          <span className="ml-4 font-sans text-[11px] font-bold uppercase tracking-[0.2em] text-gray-400 group-hover/contactitem:text-luxury-black transition-colors duration-300 whitespace-nowrap opacity-0 group-hover/sidebar:opacity-100 overflow-hidden w-0 group-hover/sidebar:w-auto mt-[2px]">
+            Contact
+          </span>
+        </div>
+
+      </div>
     </aside>
   );
 };

@@ -44,8 +44,8 @@ const VirtualConcierge: React.FC = () => {
   };
 
   return (
-    // Moved to bottom-left (left-8) to balance with the Agent Card on the right
-    <div className="fixed bottom-8 left-8 z-50 font-sans">
+    // Moved to bottom-left (left-24) to clear the collapsed sidebar area. Z-index 40 so sidebar (z-50) slides over it.
+    <div className="fixed bottom-8 left-24 z-40 font-sans">
       <AnimatePresence>
         {!isOpen && (
           <motion.button
