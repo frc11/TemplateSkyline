@@ -164,6 +164,30 @@ const Properties: React.FC = () => {
         sub: <>Residences</>
       });
     }
+
+    // Preserve any location/type/price filters passed from the Hero landing form
+    const urlLocation = searchParams.get('location');
+    const urlType = searchParams.get('type');
+    const urlPrice = searchParams.get('price');
+    if (urlLocation || urlType || urlPrice) {
+      setFilters(prev => ({
+        ...prev,
+        ...(urlLocation ? { location: urlLocation } : {}),
+        ...(urlType ? { type: urlType } : {}),
+        ...(urlPrice ? { price: urlPrice } : {}),
+      }));
+    }
+
+    // Smooth scroll to properties when filtering via the sidebar
+    if (mode || collection || urlLocation || urlType || urlPrice) {
+      setTimeout(() => {
+        const el = document.getElementById('properties');
+        if (el) {
+          const y = el.getBoundingClientRect().top + window.scrollY - 80;
+          window.scrollTo({ top: y, behavior: 'smooth' });
+        }
+      }, 150);
+    }
   }, [searchParams]);
 
   // Extract Unique Values

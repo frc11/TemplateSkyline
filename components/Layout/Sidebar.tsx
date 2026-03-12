@@ -35,8 +35,8 @@ const MENU_ITEMS: MenuItem[] = [
     icon: <Users size={20} strokeWidth={1.5} />,
     subItems: [
       { label: 'Find an Agent', path: '/agents' },
-      { label: 'Careers', path: '/agents' }, // Placeholder
-      { label: 'Global Offices', path: '/agents' } // Placeholder
+      { label: 'Careers', path: '/agents?section=careers' },
+      { label: 'Global Offices', path: '/agents?section=offices' }
     ]
   },
   {
@@ -85,6 +85,14 @@ const Sidebar: React.FC = () => {
       if (currentCat && pathCat === currentCat) return true;
     }
 
+    // Check for agent sections
+    if (location.pathname === '/agents' && path.startsWith('/agents?')) {
+      const params = new URLSearchParams(path.split('?')[1]);
+      const currentSection = searchParams.get('section');
+      const pathSection = params.get('section');
+      if (currentSection && pathSection === currentSection) return true;
+    }
+
     return false;
   };
 
@@ -103,21 +111,21 @@ const Sidebar: React.FC = () => {
 
   return (
     <aside
-      className="group/sidebar fixed left-0 top-0 h-screen w-16 hover:w-72 bg-white/95 backdrop-blur-md border-r border-gray-100 z-50 flex flex-col justify-between items-start py-8 font-sans transition-all duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] shadow-[4px_0_24px_rgba(0,0,0,0.02)]"
+      className="group/sidebar peer/sidebar fixed left-0 top-0 h-screen w-16 hover:w-72 bg-white/95 backdrop-blur-md border-r border-gray-100 z-50 flex flex-col justify-between items-start py-8 font-sans transition-all duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] shadow-[4px_0_24px_rgba(0,0,0,0.02)]"
       onMouseLeave={() => {
         if (timeoutRef.current) clearTimeout(timeoutRef.current);
         setActiveMenu(null);
       }}
     >
       {/* Logo */}
-      <div className="flex items-center px-4 w-full cursor-pointer group/logo">
+      <Link to="/" onClick={() => window.scrollTo(0, 0)} className="flex items-center px-4 w-full cursor-pointer group/logo">
         <div className="w-8 flex justify-center shrink-0">
           <Building2 strokeWidth={1} size={24} className="text-luxury-black group-hover/logo:opacity-50 transition-opacity" />
         </div>
         <span className="ml-4 font-serif text-lg tracking-widest text-luxury-black opacity-0 group-hover/sidebar:opacity-100 transition-opacity duration-300 whitespace-nowrap overflow-hidden">
           SKYLINE
         </span>
-      </div>
+      </Link>
 
       {/* Navigation */}
       <nav className="flex flex-col gap-2 w-full mt-24 flex-1 justify-start">

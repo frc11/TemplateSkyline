@@ -1,5 +1,6 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useSearchParams } from 'react-router-dom';
 import Hero from '../components/Hero';
 import FloatingFilter from '../components/Search/FloatingFilter';
 import Properties from '../components/Properties';
@@ -8,6 +9,13 @@ import EditorialGallery from '../components/EditorialGallery';
 import PanoramaViewer from '../components/PanoramaViewer';
 
 const Home: React.FC = () => {
+    const [searchParams, setSearchParams] = useSearchParams();
+
+    // Check if we have entered the site (i.e., not just on the landing hero)
+    const isContentView = searchParams.get('mode') !== null || 
+                          searchParams.get('collection') !== null || 
+                          searchParams.get('entered') === 'true';
+
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -15,32 +23,62 @@ const Home: React.FC = () => {
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
         >
-            {/* Hero Section */}
-            <Hero />
+            <AnimatePresence mode="wait">
+                {!isContentView ? (
+                    <motion.div 
+                        key="landing-view"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0, y: -50 }}
+                        transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
+                        className="relative h-screen overflow-hidden"
+                    >
+                        {/* Hero Section */}
+                        <Hero onExplore={() => setSearchParams({ mode: 'sale' })} />
 
-            {/* Floating Search Filter - Overlaps Hero and Content */}
-            <FloatingFilter
-                onSearch={() => {
-                    const element = document.getElementById('properties');
-                    element?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }}
-            />
+                        {/* Floating Search Filter - Overlaps Hero */}
+                        <FloatingFilter
+                            onSearch={(filters) => {
+                                const newParams = new URLSearchParams();
+                                // Map intent to the correct URL param
+                                if (filters.intent === 'new-developments') {
+                                    newParams.set('collection', 'new-developments');
+                                } else if (filters.intent === 'rent') {
+                                    newParams.set('mode', 'rent');
+                                } else {
+                                    // Default to 'sale' (Buy)
+                                    newParams.set('mode', 'sale');
+                                }
+                                // Also pass any additional filters selected
+                                if (filters.location !== 'all') newParams.set('location', filters.location);
+                                if (filters.type !== 'all') newParams.set('type', filters.type);
+                                if (filters.price !== 'all') newParams.set('price', filters.price);
+                                setSearchParams(newParams);
+                            }}
+                        />
+                    </motion.div>
+                ) : (
+                    <motion.div
+                        key="content-view"
+                        initial={{ opacity: 0, y: 50 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
+                    >
+                        {/* Main Content */}
+                        <Properties />
 
-            {/* Main Content */}
-            <Properties />
+                        {/* Interactive Materiality Section */}
+                        <InteractiveDetail />
 
-            {/* Interactive Materiality Section */}
-            <InteractiveDetail />
+                        {/* Editorial Gallery */}
+                        <EditorialGallery />
 
-            {/* Editorial Gallery */}
-            <EditorialGallery />
+                        {/* 360 Panorama View */}
+                        <PanoramaViewer />
 
-            {/* 360 Panorama View */}
-            <PanoramaViewer />
-
-            {/* Footer */}
-            <footer className="bg-gray-50 py-24 px-12 md:px-24 border-t border-gray-200 relative z-10">
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
+                        {/* Footer */}
+                        <footer className="bg-gray-50 py-24 px-12 md:px-24 border-t border-gray-200 relative z-10">
+                            <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
                     <div className="space-y-6">
                         <h4 className="font-sans uppercase tracking-architect text-xs font-bold">Contact</h4>
                         <p className="font-serif text-gray-500 text-sm">
@@ -66,7 +104,10 @@ const Home: React.FC = () => {
                 </div>
             </footer>
         </motion.div>
-    );
+    )}
+</AnimatePresence>
+</motion.div>
+);
 };
 
 export default Home;

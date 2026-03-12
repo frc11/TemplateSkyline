@@ -55,8 +55,8 @@ const App: React.FC = () => {
           {/* Vertical Sidebar */}
           <Sidebar />
 
-          {/* Main Content Wrapper - Added pl-20 for sidebar offset */}
-          <div className="pl-20 w-full relative">
+          {/* Main Content Wrapper - offset tracks sidebar expansion via peer logic */}
+          <div className="pl-16 peer-hover/sidebar:pl-72 w-full relative transition-[padding] duration-500 ease-[cubic-bezier(0.19,1,0.22,1)]">
             <AnimatedRoutes />
           </div>
 

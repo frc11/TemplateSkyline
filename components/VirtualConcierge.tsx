@@ -44,8 +44,8 @@ const VirtualConcierge: React.FC = () => {
   };
 
   return (
-    // Moved to bottom-left (left-24) to clear the collapsed sidebar area. Z-index 40 so sidebar (z-50) slides over it.
-    <div className="fixed bottom-8 left-24 z-40 font-sans">
+    // Tracks sidebar expansion using peer-hover to smoothly push to the right
+    <div className="fixed bottom-8 left-20 peer-hover/sidebar:left-[19rem] transition-[left] duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] z-40 font-sans">
       <AnimatePresence>
         {!isOpen && (
           <motion.button

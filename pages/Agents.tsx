@@ -1,11 +1,30 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { AGENTS } from '../data/agents';
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowUpRight, MapPin } from 'lucide-react';
 import { useModal } from '../context/ModalContext';
+import { useSearchParams } from 'react-router-dom';
 
 const Agents: React.FC = () => {
     const { openModal } = useModal();
+    const [searchParams] = useSearchParams();
+
+    useEffect(() => {
+        const section = searchParams.get('section');
+        if (section) {
+            setTimeout(() => {
+                const el = document.getElementById(section);
+                if (el) {
+                    // Add an offset for the fixed header/sidebar if needed
+                    const y = el.getBoundingClientRect().top + window.scrollY - 100;
+                    window.scrollTo({ top: y, behavior: 'smooth' });
+                }
+            }, 150);
+        } else {
+            // Scroll to top if no section is specified (e.g. clicking "Find an Agent")
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    }, [searchParams]);
 
     return (
         <motion.div
@@ -68,11 +87,54 @@ const Agents: React.FC = () => {
                 ))}
             </div>
 
+            {/* Global Offices Section */}
+            <div id="offices" className="mt-32 pt-24 border-t border-gray-100">
+                <div className="flex flex-col md:flex-row justify-between items-start mb-16">
+                    <h2 className="font-sans text-3xl md:text-5xl uppercase tracking-tighter font-light text-luxury-black">
+                        Global <br /> Presence
+                    </h2>
+                    <p className="font-serif text-gray-500 max-w-md mt-4 md:mt-0 leading-relaxed md:text-right">
+                        Our network extends across the world's most coveted destinations, providing unparalleled access to extraordinary properties.
+                    </p>
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+                     {['New York', 'London', 'Dubai', 'Miami'].map((city, idx) => (
+                         <motion.div 
+                             key={city} 
+                             initial={{ opacity: 0, y: 30 }}
+                             whileInView={{ opacity: 1, y: 0 }}
+                             viewport={{ once: true, margin: "-50px" }}
+                             transition={{ duration: 0.6, delay: idx * 0.15, ease: [0.22, 1, 0.36, 1] }}
+                             className="group cursor-pointer"
+                         >
+                             <div className="aspect-[4/3] bg-gray-50 mb-6 overflow-hidden relative">
+                                  <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors duration-500" />
+                                  {/* Dummy abstract shapes or images could go here, for now solid tone */}
+                             </div>
+                             <h4 className="font-sans text-sm uppercase tracking-widest font-bold text-luxury-black mb-2 flex items-center gap-2">
+                                 <MapPin size={14} className="text-gray-400 group-hover:text-luxury-black transition-colors" />
+                                 {city}
+                             </h4>
+                             <p className="font-serif text-gray-400 text-xs italic">
+                                 {idx === 0 ? 'Headquarters' : 'Regional Office'}
+                             </p>
+                         </motion.div>
+                     ))}
+                </div>
+            </div>
+
             {/* Join Us / Footer CTA */}
-            <div className="mt-32 pt-12 border-t border-gray-100 flex justify-center">
-                <p className="font-serif text-gray-400 text-center">
-                    Interested in joining our team? <a href="#" className="text-luxury-black underline underline-offset-4 decoration-1">Careers</a>
+            <div id="careers" className="mt-32 pt-24 border-t border-gray-100 flex flex-col items-center justify-center text-center pb-12">
+                <span className="font-sans text-[10px] uppercase tracking-[0.3em] font-bold text-gray-400 mb-6 block">We are hiring</span>
+                <h3 className="font-serif text-4xl italic text-luxury-black mb-6">Join our growing team.</h3>
+                <p className="font-sans text-sm text-gray-500 max-w-md mb-8 leading-relaxed">
+                    We are always looking for exceptional talent to join our global network of advisors and specialists.
                 </p>
+                <a href="#" className="inline-flex items-center gap-2 border-b border-luxury-black pb-1 hover:opacity-70 transition-opacity">
+                    <span className="font-sans text-xs uppercase tracking-widest font-bold">View Openings</span>
+                    <ArrowUpRight size={14} />
+                </a>
             </div>
         </motion.div>
     );
