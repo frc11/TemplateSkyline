@@ -4,8 +4,7 @@ export interface Agent {
     role: string;
     location: string;
     image: string;
-    phone: string;
-    email: string;
+    whatsapp: string;
 }
 
 export const AGENTS: Agent[] = [
@@ -15,8 +14,7 @@ export const AGENTS: Agent[] = [
         role: 'Senior Broker',
         location: 'New York',
         image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=2574&auto=format&fit=crop',
-        phone: '+1 (212) 555-0123',
-        email: 'alexander@skyline.estates'
+        whatsapp: '5493814154708'
     },
     {
         id: '2',
@@ -24,8 +22,7 @@ export const AGENTS: Agent[] = [
         role: 'Global Consultant',
         location: 'Shanghai',
         image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=2576&auto=format&fit=crop',
-        phone: '+86 21 5555 0199',
-        email: 'isabella@skyline.estates'
+        whatsapp: '5493814154708'
     },
     {
         id: '3',
@@ -33,8 +30,7 @@ export const AGENTS: Agent[] = [
         role: 'Architectural Specialist',
         location: 'London',
         image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=2574&auto=format&fit=crop',
-        phone: '+44 20 7123 4567',
-        email: 'marcus@skyline.estates'
+        whatsapp: '5493814154708'
     },
     {
         id: '4',
@@ -42,8 +38,7 @@ export const AGENTS: Agent[] = [
         role: 'Luxury Estates Director',
         location: 'Milan',
         image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=2661&auto=format&fit=crop',
-        phone: '+39 02 5555 7890',
-        email: 'elena@skyline.estates'
+        whatsapp: '5493814154708'
     },
     {
         id: '5',
@@ -51,16 +46,14 @@ export const AGENTS: Agent[] = [
         role: 'Penthouse Acquisitions',
         location: 'Los Angeles',
         image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=2574&auto=format&fit=crop',
-        phone: '+1 (310) 555-0456',
-        email: 'julian@skyline.estates'
+        whatsapp: '5493814154708'
     },
     {
         id: '6',
         name: 'Sarah Sterling',
         role: 'Private Client Advisor',
         location: 'Dubai',
-        image: 'https://images.unsplash.com/photo-1598550832236-81cf0ec54465?q=80&w=2574&auto=format&fit=crop',
-        phone: '+971 4 555 1234',
-        email: 'sarah@skyline.estates'
+        image: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=2576&auto=format&fit=crop',
+        whatsapp: '5493814154708'
     }
 ];

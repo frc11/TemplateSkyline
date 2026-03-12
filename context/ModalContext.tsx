@@ -2,7 +2,8 @@ import React, { createContext, useContext, useState, ReactNode } from 'react';
 
 interface ModalContextType {
     isModalOpen: boolean;
-    openModal: () => void;
+    modalType: 'inquiry' | 'careers';
+    openModal: (type?: 'inquiry' | 'careers') => void;
     closeModal: () => void;
 }
 
@@ -10,12 +11,16 @@ const ModalContext = createContext<ModalContextType | undefined>(undefined);
 
 export const ModalProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [modalType, setModalType] = useState<'inquiry' | 'careers'>('inquiry');
 
-    const openModal = () => setIsModalOpen(true);
+    const openModal = (type: 'inquiry' | 'careers' = 'inquiry') => {
+        setModalType(type);
+        setIsModalOpen(true);
+    };
     const closeModal = () => setIsModalOpen(false);
 
     return (
-        <ModalContext.Provider value={{ isModalOpen, openModal, closeModal }}>
+        <ModalContext.Provider value={{ isModalOpen, modalType, openModal, closeModal }}>
             {children}
         </ModalContext.Provider>
     );

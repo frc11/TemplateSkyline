@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, useScroll, useMotionValueEvent, AnimatePresence } from 'framer-motion';
-import { Phone, Calendar, ArrowRight } from 'lucide-react';
+import { Phone, Calendar, ArrowRight, MessageCircle } from 'lucide-react';
 import { useModal } from '../context/ModalContext';
 
 const AgentCard: React.FC = () => {
@@ -9,8 +9,8 @@ const AgentCard: React.FC = () => {
   const { openModal } = useModal();
 
   useMotionValueEvent(scrollY, "change", (latest) => {
-    // Show after scrolling past the hero section (approx 500px)
-    if (latest > 500) {
+    const nearBottom = latest + window.innerHeight >= document.body.offsetHeight - 200;
+    if (latest > 500 && !nearBottom) {
       setIsVisible(true);
     } else {
       setIsVisible(false);
@@ -45,10 +45,15 @@ const AgentCard: React.FC = () => {
 
           {/* Actions */}
           <div className="flex items-center gap-3">
-            <button className="flex items-center gap-2 px-4 py-3 rounded-sm hover:bg-white/10 transition-colors text-xs font-sans font-medium uppercase tracking-wider text-gray-300 hover:text-white">
-              <Phone size={14} />
+            <a
+              href="https://wa.me/5493814154708?text=Hello%2C%20I%20am%20interested%20in%20a%20property%20from%20Skyline%20Estates."
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 px-4 py-3 rounded-sm hover:bg-white/10 transition-colors text-xs font-sans font-medium uppercase tracking-wider text-gray-300 hover:text-white"
+            >
+              <MessageCircle size={14} />
               <span>WhatsApp</span>
-            </button>
+            </a>
 
             <motion.button
               whileHover={{ scale: 1.05 }}

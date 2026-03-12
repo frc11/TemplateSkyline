@@ -19,7 +19,7 @@ const HOTSPOTS: Hotspot[] = [
     y: 55,
     title: 'Focus Element',
     material: 'Arabescato Corchia Marble',
-    detailImage: 'https://images.unsplash.com/photo-1590453717013-4452c96752d5?q=80&w=200&auto=format&fit=crop',
+    detailImage: 'https://images.unsplash.com/photo-1618221118493-9cfa1a1c00da?q=80&w=400&auto=format&fit=crop',
     description: 'Imported from the quarries of Carrara, defined by its ovular breccias.'
   },
   {

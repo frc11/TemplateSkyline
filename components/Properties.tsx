@@ -115,12 +115,17 @@ const Properties: React.FC = () => {
   const [targetId, setTargetId] = useState<string | null>(null);
   const [searchParams] = useSearchParams();
 
-  const [filters, setFilters] = useState({
+  // Section = which view the user is in (Buy / Rent / New Dev / All) — NOT clearable
+  const [section, setSection] = useState<{ status: string; collection: string }>({
+    status: 'all',
+    collection: 'all',
+  });
+
+  // User filters = additional refinements on top of the section — clearable
+  const [userFilters, setUserFilters] = useState({
     location: 'all',
     type: 'all',
     price: 'all',
-    status: 'all',
-    collection: 'all'
   });
 
   const [title, setTitle] = useState<{ main: React.ReactNode, sub: React.ReactNode }>({
@@ -134,35 +139,20 @@ const Properties: React.FC = () => {
     const collection = searchParams.get('collection');
 
     if (collection === 'new-developments') {
-      setFilters(prev => ({ ...prev, collection: 'new-developments', status: 'all', type: 'all' }));
-      setTitle({
-        main: <>New <br /></>,
-        sub: <>Developments</>
-      });
+      setSection({ status: 'all', collection: 'new-developments' });
+      setTitle({ main: <>New <br /></>, sub: <>Developments</> });
     } else if (collection === 'penthouses') {
-      setFilters(prev => ({ ...prev, collection: 'penthouses', status: 'all', type: 'all' }));
-      setTitle({
-        main: <>Penthouse <br /></>,
-        sub: <>Collection</>
-      });
+      setSection({ status: 'all', collection: 'penthouses' });
+      setTitle({ main: <>Penthouse <br /></>, sub: <>Collection</> });
     } else if (mode === 'rent') {
-      setFilters(prev => ({ ...prev, status: 'rent', collection: 'all' }));
-      setTitle({
-        main: <>Luxury <br /></>,
-        sub: <>Rentals</>
-      });
+      setSection({ status: 'rent', collection: 'all' });
+      setTitle({ main: <>Luxury <br /></>, sub: <>Rentals</> });
     } else if (mode === 'sale') {
-      setFilters(prev => ({ ...prev, status: 'sale', collection: 'all' }));
-      setTitle({
-        main: <>Curated <br /></>,
-        sub: <>For Sale</>
-      });
+      setSection({ status: 'sale', collection: 'all' });
+      setTitle({ main: <>Curated <br /></>, sub: <>For Sale</> });
     } else {
-      setFilters(prev => ({ ...prev, status: 'all', collection: 'all' }));
-      setTitle({
-        main: <>Curated <br /></>,
-        sub: <>Residences</>
-      });
+      setSection({ status: 'all', collection: 'all' });
+      setTitle({ main: <>Curated <br /></>, sub: <>Residences</> });
     }
 
     // Preserve any location/type/price filters passed from the Hero landing form
@@ -170,7 +160,7 @@ const Properties: React.FC = () => {
     const urlType = searchParams.get('type');
     const urlPrice = searchParams.get('price');
     if (urlLocation || urlType || urlPrice) {
-      setFilters(prev => ({
+      setUserFilters(prev => ({
         ...prev,
         ...(urlLocation ? { location: urlLocation } : {}),
         ...(urlType ? { type: urlType } : {}),
@@ -192,42 +182,44 @@ const Properties: React.FC = () => {
 
   // Extract Unique Values
   const locations = useMemo(() => Array.from(new Set(PROPERTIES.map(p => p.location))), []);
-  const types = useMemo(() => Array.from(new Set(PROPERTIES.map(p => p.type))), []);
+  // Exclude 'Penthouse' — it has its own dedicated section, not a type filter
+  const types = useMemo(() => Array.from(new Set(PROPERTIES.map(p => p.type))).filter(t => t !== 'Penthouse'), []);
   const priceRanges = [
     { label: 'Under $10M', value: 'under-10' },
     { label: '$10M - $30M', value: '10-30' },
     { label: 'Above $30M', value: 'above-30' },
   ];
 
-  // Filtering Logic
+  // Combined filter logic: section is always applied, user filters stack on top
   const filteredProperties = useMemo(() => {
     return PROPERTIES.filter(property => {
-      // Status Match (Buy/Rent)
-      if (filters.status !== 'all' && property.status !== filters.status) return false;
+      // Section: status (buy/rent)
+      if (section.status !== 'all' && property.status !== section.status) return false;
 
-      // Collection Match
-      if (filters.collection === 'new-developments' && !property.isNewDevelopment) return false;
-      if (filters.collection === 'penthouses' && property.type !== 'Penthouse') return false;
+      // Section: collection (new-dev / penthouses)
+      if (section.collection === 'new-developments' && !property.isNewDevelopment) return false;
+      if (section.collection === 'penthouses' && property.type !== 'Penthouse') return false;
 
-      // Location Match
-      if (filters.location !== 'all' && property.location !== filters.location) return false;
+      // User filter: Location
+      if (userFilters.location !== 'all' && property.location !== userFilters.location) return false;
 
-      // Type Match
-      if (filters.type !== 'all' && property.type !== filters.type) return false;
+      // User filter: Type
+      if (userFilters.type !== 'all' && property.type !== userFilters.type) return false;
 
-      // Price Match
-      if (filters.price !== 'all') {
+      // User filter: Price
+      if (userFilters.price !== 'all') {
         const price = property.rawPrice;
-        if (filters.price === 'under-10' && price >= 10000000) return false;
-        if (filters.price === '10-30' && (price < 10000000 || price > 30000000)) return false;
-        if (filters.price === 'above-30' && price <= 30000000) return false;
+        if (userFilters.price === 'under-10' && price >= 10000000) return false;
+        if (userFilters.price === '10-30' && (price < 10000000 || price > 30000000)) return false;
+        if (userFilters.price === 'above-30' && price <= 30000000) return false;
       }
 
       return true;
     });
-  }, [filters]);
+  }, [section, userFilters]);
 
-  const activeFilterCount = Object.values(filters).filter(v => v !== 'all').length;
+  // Only count user-level filters (not the section)
+  const activeFilterCount = Object.values(userFilters).filter(v => v !== 'all').length;
 
   // Scroll to targeted property when switching to grid view
   useEffect(() => {
@@ -270,7 +262,8 @@ const Properties: React.FC = () => {
         </motion.p>
       </div>
 
-      {/* Toolbar */}
+      {/* Toolbar — hidden for curated sections like Penthouse Collection */}
+      {section.collection !== 'penthouses' && (
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -285,22 +278,22 @@ const Properties: React.FC = () => {
           </div>
           <FilterSelect
             label="Location"
-            value={filters.location}
+            value={userFilters.location}
             options={locations}
-            onChange={(val) => setFilters(prev => ({ ...prev, location: val }))}
+            onChange={(val) => setUserFilters(prev => ({ ...prev, location: val }))}
             ariaLabel="Filter properties by location"
           />
           <FilterSelect
             label="Type"
-            value={filters.type}
+            value={userFilters.type}
             options={types}
-            onChange={(val) => setFilters(prev => ({ ...prev, type: val }))}
+            onChange={(val) => setUserFilters(prev => ({ ...prev, type: val }))}
             ariaLabel="Filter properties by type"
           />
           <div className="relative group w-full md:w-auto">
             <select
-              value={filters.price}
-              onChange={(e) => setFilters(prev => ({ ...prev, price: e.target.value }))}
+              value={userFilters.price}
+              onChange={(e) => setUserFilters(prev => ({ ...prev, price: e.target.value }))}
               aria-label="Filter properties by price range"
               className="appearance-none bg-transparent border border-gray-200 pl-4 pr-10 py-3 w-full md:w-48 text-xs font-sans font-bold uppercase tracking-wider text-luxury-black focus:outline-none focus:border-luxury-black focus:ring-2 focus:ring-luxury-black focus:ring-offset-2 hover:border-gray-400 transition-colors cursor-pointer rounded-sm"
             >
@@ -351,7 +344,7 @@ const Properties: React.FC = () => {
                 exit={{ opacity: 0, scale: 1.1, filter: "blur(4px)" }}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                onClick={() => setFilters({ location: 'all', type: 'all', price: 'all', status: 'all', collection: 'all' })}
+                onClick={() => setUserFilters({ location: 'all', type: 'all', price: 'all' })}
                 aria-label={`Clear ${activeFilterCount} active filter${activeFilterCount > 1 ? 's' : ''}`}
                 className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 shadow-sm rounded-full group hover:border-red-200 transition-colors focus:outline-none focus:ring-2 focus:ring-red-300 focus:ring-offset-2"
                 id="clear-filters-btn"
@@ -368,6 +361,38 @@ const Properties: React.FC = () => {
           </AnimatePresence>
         </div>
       </motion.div>
+      )}
+
+      {/* Penthouse section: minimal view toggle only, no filters */}
+      {section.collection === 'penthouses' && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="mb-16 flex justify-end border-y border-gray-100 py-6"
+        >
+          <div className="flex items-center bg-gray-50 p-1 rounded-sm border border-gray-100">
+            <button
+              onClick={() => setViewMode('grid')}
+              aria-label="Switch to grid view"
+              className={`flex items-center gap-2 px-4 py-2 rounded-sm text-[10px] uppercase tracking-widest font-bold transition-all ${
+                viewMode === 'grid' ? 'bg-white text-luxury-black shadow-sm' : 'text-gray-400 hover:text-gray-600'
+              }`}
+            >
+              <GridIcon size={14} /><span>List</span>
+            </button>
+            <button
+              onClick={() => setViewMode('map')}
+              aria-label="Switch to map view"
+              className={`flex items-center gap-2 px-4 py-2 rounded-sm text-[10px] uppercase tracking-widest font-bold transition-all ${
+                viewMode === 'map' ? 'bg-white text-luxury-black shadow-sm' : 'text-gray-400 hover:text-gray-600'
+              }`}
+            >
+              <MapIcon size={14} /><span>Map</span>
+            </button>
+          </div>
+        </motion.div>
+      )}
 
       {/* Content Area */}
       <AnimatePresence mode='wait'>
@@ -415,7 +440,7 @@ const Properties: React.FC = () => {
                   {/* Actions */}
                   {activeFilterCount > 0 ? (
                     <button
-                      onClick={() => setFilters({ location: 'all', type: 'all', price: 'all', status: 'all', collection: 'all' })}
+                      onClick={() => setUserFilters({ location: 'all', type: 'all', price: 'all' })}
                       className="flex items-center gap-2 px-6 py-3 bg-luxury-black text-white text-xs font-sans font-bold uppercase tracking-widest hover:bg-gray-800 transition-colors"
                     >
                       <X size={14} />

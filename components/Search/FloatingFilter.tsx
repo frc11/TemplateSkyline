@@ -113,7 +113,8 @@ const FloatingFilter: React.FC<FloatingFilterProps> = ({ onSearch }) => {
 
   // Derive exact options from real property data — always in sync with Properties.tsx
   const locations = Array.from(new Set(PROPERTIES.map(p => p.location)));
-  const types = Array.from(new Set(PROPERTIES.map(p => p.type)));
+  // 'Penthouse' is its own section — excluded from the Type dropdown
+  const types = (Array.from(new Set(PROPERTIES.map(p => p.type))) as string[]).filter(t => t !== 'Penthouse');
   const priceRanges = [
     { label: 'Under $10M', value: 'under-10' },
     { label: '$10M – $30M', value: '10-30' },

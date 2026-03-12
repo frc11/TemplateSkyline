@@ -4,9 +4,8 @@ import { useSearchParams } from 'react-router-dom';
 import Hero from '../components/Hero';
 import FloatingFilter from '../components/Search/FloatingFilter';
 import Properties from '../components/Properties';
-import InteractiveDetail from '../components/InteractiveDetail';
-import EditorialGallery from '../components/EditorialGallery';
-import PanoramaViewer from '../components/PanoramaViewer';
+import SectionContent from '../components/SectionContent';
+import Footer from '../components/Layout/Footer';
 
 const Home: React.FC = () => {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -67,42 +66,16 @@ const Home: React.FC = () => {
                         {/* Main Content */}
                         <Properties />
 
-                        {/* Interactive Materiality Section */}
-                        <InteractiveDetail />
-
-                        {/* Editorial Gallery */}
-                        <EditorialGallery />
-
-                        {/* 360 Panorama View */}
-                        <PanoramaViewer />
+                        {/* Section-specific editorial content */}
+                        <SectionContent
+                          section={{
+                            status: searchParams.get('mode') ?? 'all',
+                            collection: searchParams.get('collection') ?? 'all',
+                          }}
+                        />
 
                         {/* Footer */}
-                        <footer className="bg-gray-50 py-24 px-12 md:px-24 border-t border-gray-200 relative z-10">
-                            <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
-                    <div className="space-y-6">
-                        <h4 className="font-sans uppercase tracking-architect text-xs font-bold">Contact</h4>
-                        <p className="font-serif text-gray-500 text-sm">
-                            New York, NY<br />
-                            +1 (555) 000-0000<br />
-                            hello@skyline.estates
-                        </p>
-                    </div>
-                    <div className="space-y-6">
-                        <h4 className="font-sans uppercase tracking-architect text-xs font-bold">Social</h4>
-                        <div className="flex flex-col space-y-2 font-serif text-gray-500 text-sm">
-                            <a href="#" className="hover:text-black transition-colors">Instagram</a>
-                            <a href="#" className="hover:text-black transition-colors">LinkedIn</a>
-                            <a href="#" className="hover:text-black transition-colors">Pinterest</a>
-                        </div>
-                    </div>
-                    <div className="md:col-span-2 text-right flex flex-col justify-between">
-                        <h2 className="text-4xl font-sans uppercase tracking-widest opacity-10">Skyline</h2>
-                        <p className="text-[10px] uppercase tracking-widest text-gray-400 mt-auto">
-                            © 2024 Skyline Estates. All rights reserved.
-                        </p>
-                    </div>
-                </div>
-            </footer>
+                        <Footer />
         </motion.div>
     )}
 </AnimatePresence>

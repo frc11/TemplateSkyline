@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Building2, Mail, ArrowRight, Home, Users, BookOpen, MapPin, Phone, Instagram, Linkedin, Facebook, Share2 } from 'lucide-react';
+import { Building2, Mail, ArrowRight, Home, Users, BookOpen, MapPin, Phone, MessageCircle, Instagram, Linkedin, Facebook, Share2 } from 'lucide-react';
 import { useModal } from '../../context/ModalContext';
 
 import { Link, useSearchParams, useLocation } from 'react-router-dom';
@@ -30,14 +30,10 @@ const MENU_ITEMS: MenuItem[] = [
     ]
   },
   {
-    id: 'agents',
-    label: 'Agents',
+    id: 'agency',
+    label: 'The Agency',
     icon: <Users size={20} strokeWidth={1.5} />,
-    subItems: [
-      { label: 'Find an Agent', path: '/agents' },
-      { label: 'Careers', path: '/agents?section=careers' },
-      { label: 'Global Offices', path: '/agents?section=offices' }
-    ]
+    subItems: []
   },
   {
     id: 'journal',
@@ -59,9 +55,53 @@ const Sidebar: React.FC = () => {
   const [searchParams] = useSearchParams();
   const location = useLocation();
 
+  // Auto-set the active menu based on current location/params
+  React.useEffect(() => {
+    const currentPath = location.pathname;
+    if (currentPath === '/agents') {
+      setActiveMenu('agency');
+    } else if (currentPath === '/journal') {
+      setActiveMenu('journal');
+    } else if (currentPath === '/' && (searchParams.get('mode') || searchParams.get('collection'))) {
+      setActiveMenu('properties');
+    }
+  }, [location.pathname, searchParams]);
+
   // Check if a sub-item is currently active
   const isSubItemActive = (path: string): boolean => {
+    // Check for agent sections specifically first to avoid broad matching
+    if (location.pathname === '/agents') {
+      const currentSection = searchParams.get('section');
+      
+      // If no section in URL, only "Find an Agent" (path === '/agents') is active
+      if (!currentSection) {
+        return path === '/agents';
+      }
+      
+      // If there is a section, match against path with that section query
+      if (path.includes('?section=')) {
+        const pathParams = new URLSearchParams(path.split('?')[1]);
+        const pathSection = pathParams.get('section');
+        return currentSection === pathSection;
+      }
+      
+      return false;
+    }
+
     if (location.pathname !== '/' && path.startsWith(location.pathname)) {
+      // For other pages, check if categories or sections match if present
+      const pathParts = path.split('?');
+      if (pathParts.length > 1) {
+        const pathParams = new URLSearchParams(pathParts[1]);
+        for (const [key, value] of pathParams.entries()) {
+          if (searchParams.get(key) === value) return true;
+        }
+        return false;
+      }
+      
+      // If path has no params but current URL does, it's not a match (too broad)
+      if (searchParams.toString() !== '') return false;
+      
       return true;
     }
 
@@ -73,24 +113,11 @@ const Sidebar: React.FC = () => {
       const pathMode = params.get('mode');
       const pathCollection = params.get('collection');
 
-      if (currentCollection && pathCollection === currentCollection) return true;
-      if (currentMode && pathMode === currentMode) return true;
-    }
-
-    // Check for journal categories
-    if (location.pathname === '/journal' && path.startsWith('/journal')) {
-      const params = new URLSearchParams(path.split('?')[1]);
-      const currentCat = searchParams.get('cat');
-      const pathCat = params.get('cat');
-      if (currentCat && pathCat === currentCat) return true;
-    }
-
-    // Check for agent sections
-    if (location.pathname === '/agents' && path.startsWith('/agents?')) {
-      const params = new URLSearchParams(path.split('?')[1]);
-      const currentSection = searchParams.get('section');
-      const pathSection = params.get('section');
-      if (currentSection && pathSection === currentSection) return true;
+      if (pathCollection && currentCollection === pathCollection) return true;
+      if (pathMode && currentMode === pathMode) return true;
+      
+      // If it's the home page with no params, and the path is just '/', it would match, 
+      // but here we only handle paths starting with '/?'
     }
 
     return false;
@@ -100,7 +127,12 @@ const Sidebar: React.FC = () => {
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
-    setActiveMenu(id);
+    const item = MENU_ITEMS.find(m => m.id === id);
+    if (item && item.subItems.length > 0) {
+      setActiveMenu(id);
+    } else {
+      setActiveMenu(null);
+    }
   };
 
   const handleMouseLeave = () => {
@@ -136,16 +168,25 @@ const Sidebar: React.FC = () => {
             onMouseEnter={() => handleMouseEnter(item.id)}
           >
             {/* The Icon & Text */}
-            <div className="flex items-center w-full px-4 cursor-pointer group/navitem py-3 transition-colors hover:bg-gray-50/80 rounded-r-full mr-2">
-              <div className="w-8 h-8 flex justify-center items-center shrink-0 text-gray-400 group-hover/navitem:text-luxury-black transition-colors duration-300">
+            <Link 
+              to={item.id === 'agency' ? '/agents' : '#'}
+              className={`flex items-center w-full px-4 cursor-pointer group/navitem py-3 transition-colors hover:bg-gray-50/80 rounded-r-full mr-2 ${
+                (item.id === 'agency' && location.pathname === '/agents') || item.subItems.some(sub => isSubItemActive(sub.path)) ? 'text-luxury-black' : 'text-gray-400'
+              }`}
+            >
+              <div className={`w-8 h-8 flex justify-center items-center shrink-0 transition-colors duration-300 ${
+                item.subItems.some(sub => isSubItemActive(sub.path)) ? 'text-luxury-black' : 'text-gray-400 group-hover/navitem:text-luxury-black'
+              }`}>
                 {item.icon}
               </div>
 
               {/* The Text - Only visible when aside is hovered */}
-              <span className="ml-4 font-sans text-[11px] font-bold uppercase tracking-[0.2em] text-gray-400 group-hover/navitem:text-luxury-black transition-colors duration-300 whitespace-nowrap opacity-0 group-hover/sidebar:opacity-100 overflow-hidden w-0 group-hover/sidebar:w-auto mt-[2px]">
+              <span className={`ml-4 font-sans text-[11px] font-bold uppercase tracking-[0.2em] transition-colors duration-300 whitespace-nowrap opacity-0 group-hover/sidebar:opacity-100 overflow-hidden w-0 group-hover/sidebar:w-auto mt-[2px] ${
+                item.subItems.some(sub => isSubItemActive(sub.path)) ? 'text-luxury-black' : 'text-gray-400 group-hover/navitem:text-luxury-black'
+              }`}>
                 {item.label}
               </span>
-            </div>
+            </Link>
 
             {/* Hover Submenu / Accordion State */}
             <AnimatePresence>
@@ -186,13 +227,28 @@ const Sidebar: React.FC = () => {
       {/* Bottom Contact Info */}
       <div className="flex flex-col w-full mt-auto mb-4 border-t border-gray-100 pt-4">
 
+        {/* WhatsApp */}
+        <a
+          href="https://wa.me/5493814154708?text=Hello%2C%20I%20am%20interested%20in%20a%20property%20from%20Skyline%20Estates."
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center w-full px-4 cursor-pointer group/contactitem py-3 transition-colors hover:bg-gray-50/80 rounded-r-full mr-2"
+        >
+          <div className="w-8 h-8 flex justify-center items-center shrink-0 text-gray-400 group-hover/contactitem:text-green-500 transition-colors duration-300">
+            <MessageCircle size={18} strokeWidth={1.5} />
+          </div>
+          <span className="ml-4 font-sans text-[11px] font-bold uppercase tracking-[0.2em] text-gray-400 group-hover/contactitem:text-green-500 transition-colors duration-300 whitespace-nowrap opacity-0 group-hover/sidebar:opacity-100 overflow-hidden w-0 group-hover/sidebar:w-auto mt-[2px]">
+            WhatsApp
+          </span>
+        </a>
+
         {/* Phone */}
-        <a href="tel:+543811234567" className="flex items-center w-full px-4 cursor-pointer group/contactitem py-3 transition-colors hover:bg-gray-50/80 rounded-r-full mr-2">
+        <a href="tel:+543814154708" className="flex items-center w-full px-4 cursor-pointer group/contactitem py-3 transition-colors hover:bg-gray-50/80 rounded-r-full mr-2">
           <div className="w-8 h-8 flex justify-center items-center shrink-0 text-gray-400 group-hover/contactitem:text-luxury-black transition-colors duration-300">
             <Phone size={18} strokeWidth={1.5} />
           </div>
           <span className="ml-4 font-sans text-[11px] font-bold uppercase tracking-[0.2em] text-gray-400 group-hover/contactitem:text-luxury-black transition-colors duration-300 whitespace-nowrap opacity-0 group-hover/sidebar:opacity-100 overflow-hidden w-0 group-hover/sidebar:w-auto mt-[2px]">
-            +54 381 123-4567
+            +54 381 415-4708
           </span>
         </a>
 
@@ -225,7 +281,7 @@ const Sidebar: React.FC = () => {
 
         {/* Contact Action */}
         <div
-          onClick={openModal}
+          onClick={() => openModal('inquiry')}
           className="flex items-center w-full px-4 cursor-pointer group/contactitem py-3 transition-colors hover:bg-gray-50/80 mt-2 border-t border-gray-50 pt-3"
         >
           <div className="w-8 h-8 flex justify-center items-center shrink-0 text-gray-400 group-hover/contactitem:text-luxury-black transition-colors duration-300">

@@ -15,13 +15,14 @@ import Journal from './pages/Journal';
 import { ModalProvider, useModal } from './context/ModalContext';
 import Modal from './components/UI/Modal';
 import InquiryForm from './components/Forms/InquiryForm';
+import ApplicationForm from './components/Forms/ApplicationForm';
 import ScrollToTop from './components/Utils/ScrollToTop';
 
 const GlobalModalManager: React.FC = () => {
-  const { isModalOpen, closeModal } = useModal();
+  const { isModalOpen, closeModal, modalType } = useModal();
   return (
     <Modal isOpen={isModalOpen} onClose={closeModal}>
-      <InquiryForm />
+      {modalType === 'careers' ? <ApplicationForm /> : <InquiryForm />}
     </Modal>
   );
 };
