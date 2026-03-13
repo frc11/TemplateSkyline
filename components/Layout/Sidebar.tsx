@@ -20,30 +20,30 @@ interface MenuItem {
 const MENU_ITEMS: MenuItem[] = [
   {
     id: 'properties',
-    label: 'Properties',
+    label: 'Propiedades',
     icon: <Home size={20} strokeWidth={1.5} />,
     subItems: [
-      { label: 'Buy', path: '/?mode=sale' },
-      { label: 'Rent', path: '/?mode=rent' },
-      { label: 'New Developments', path: '/?collection=new-developments' },
-      { label: 'Penthouse Collection', path: '/?collection=penthouses' }
+      { label: 'Comprar', path: '/?mode=sale' },
+      { label: 'Alquilar', path: '/?mode=rent' },
+      { label: 'Nuevos Desarrollos', path: '/?collection=new-developments' },
+      { label: 'Colección Penthouse', path: '/?collection=penthouses' }
     ]
   },
   {
     id: 'agency',
-    label: 'The Agency',
+    label: 'La Agencia',
     icon: <Users size={20} strokeWidth={1.5} />,
     subItems: []
   },
   {
     id: 'journal',
-    label: 'Journal',
+    label: 'Revista',
     icon: <BookOpen size={20} strokeWidth={1.5} />,
     subItems: [
-      { label: 'Architecture', path: '/journal?cat=Architecture' },
-      { label: 'Interior Design', path: '/journal?cat=Interior Design' },
-      { label: 'Market Reports', path: '/journal?cat=Market Report' },
-      { label: 'Events', path: '/journal?cat=Event' }
+      { label: 'Arquitectura', path: '/journal?cat=Arquitectura' },
+      { label: 'Diseño de Interiores', path: '/journal?cat=Diseño de Interiores' },
+      { label: 'Informes del Mercado', path: '/journal?cat=Informe del Mercado' },
+      { label: 'Eventos', path: '/journal?cat=Evento' }
     ]
   }
 ];
@@ -72,19 +72,19 @@ const Sidebar: React.FC = () => {
     // Check for agent sections specifically first to avoid broad matching
     if (location.pathname === '/agents') {
       const currentSection = searchParams.get('section');
-      
+
       // If no section in URL, only "Find an Agent" (path === '/agents') is active
       if (!currentSection) {
         return path === '/agents';
       }
-      
+
       // If there is a section, match against path with that section query
       if (path.includes('?section=')) {
         const pathParams = new URLSearchParams(path.split('?')[1]);
         const pathSection = pathParams.get('section');
         return currentSection === pathSection;
       }
-      
+
       return false;
     }
 
@@ -98,10 +98,10 @@ const Sidebar: React.FC = () => {
         }
         return false;
       }
-      
+
       // If path has no params but current URL does, it's not a match (too broad)
       if (searchParams.toString() !== '') return false;
-      
+
       return true;
     }
 
@@ -115,7 +115,7 @@ const Sidebar: React.FC = () => {
 
       if (pathCollection && currentCollection === pathCollection) return true;
       if (pathMode && currentMode === pathMode) return true;
-      
+
       // If it's the home page with no params, and the path is just '/', it would match, 
       // but here we only handle paths starting with '/?'
     }
@@ -168,29 +168,26 @@ const Sidebar: React.FC = () => {
             onMouseEnter={() => handleMouseEnter(item.id)}
           >
             {/* The Icon & Text */}
-            <Link 
-              to={item.id === 'agency' ? '/agents' : '#'}
-              className={`flex items-center w-full px-4 cursor-pointer group/navitem py-3 transition-colors hover:bg-gray-50/80 rounded-r-full mr-2 ${
-                (item.id === 'agency' && location.pathname === '/agents') || item.subItems.some(sub => isSubItemActive(sub.path)) ? 'text-luxury-black' : 'text-gray-400'
-              }`}
+            <Link
+              to={item.id === 'agency' ? '/agents' : item.id === 'journal' ? '/journal' : item.id === 'properties' ? '/properties' : '#'}
+              className={`flex items-center w-full px-4 cursor-pointer group/navitem py-3 transition-colors hover:bg-gray-50/80 rounded-r-full mr-2 ${(item.id === 'agency' && location.pathname === '/agents') || item.subItems.some(sub => isSubItemActive(sub.path)) ? 'text-luxury-black' : 'text-gray-400'
+                }`}
             >
-              <div className={`w-8 h-8 flex justify-center items-center shrink-0 transition-colors duration-300 ${
-                item.subItems.some(sub => isSubItemActive(sub.path)) ? 'text-luxury-black' : 'text-gray-400 group-hover/navitem:text-luxury-black'
-              }`}>
+              <div className={`w-8 h-8 flex justify-center items-center shrink-0 transition-colors duration-300 ${item.subItems.some(sub => isSubItemActive(sub.path)) ? 'text-luxury-black' : 'text-gray-400 group-hover/navitem:text-luxury-black'
+                }`}>
                 {item.icon}
               </div>
 
               {/* The Text - Only visible when aside is hovered */}
-              <span className={`ml-4 font-sans text-[11px] font-bold uppercase tracking-[0.2em] transition-colors duration-300 whitespace-nowrap opacity-0 group-hover/sidebar:opacity-100 overflow-hidden w-0 group-hover/sidebar:w-auto mt-[2px] ${
-                item.subItems.some(sub => isSubItemActive(sub.path)) ? 'text-luxury-black' : 'text-gray-400 group-hover/navitem:text-luxury-black'
-              }`}>
+              <span className={`ml-4 font-sans text-[11px] font-bold uppercase tracking-[0.2em] transition-colors duration-300 whitespace-nowrap opacity-0 group-hover/sidebar:opacity-100 overflow-hidden w-0 group-hover/sidebar:w-auto mt-[2px] ${item.subItems.some(sub => isSubItemActive(sub.path)) ? 'text-luxury-black' : 'text-gray-400 group-hover/navitem:text-luxury-black'
+                }`}>
                 {item.label}
               </span>
             </Link>
 
             {/* Hover Submenu / Accordion State */}
             <AnimatePresence>
-              {activeMenu === item.id && (
+              {activeMenu === item.id && item.subItems.length > 0 && (
                 <motion.div
                   initial={{ height: 0, opacity: 0 }}
                   animate={{ height: "auto", opacity: 1 }}
@@ -288,7 +285,7 @@ const Sidebar: React.FC = () => {
             <Mail size={18} strokeWidth={1.5} />
           </div>
           <span className="ml-4 font-sans text-[11px] font-bold uppercase tracking-[0.2em] text-gray-400 group-hover/contactitem:text-luxury-black transition-colors duration-300 whitespace-nowrap opacity-0 group-hover/sidebar:opacity-100 overflow-hidden w-0 group-hover/sidebar:w-auto mt-[2px]">
-            Contact
+            Contacto
           </span>
         </div>
 

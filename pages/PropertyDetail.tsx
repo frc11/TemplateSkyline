@@ -20,9 +20,9 @@ const PropertyDetail: React.FC = () => {
     if (!property) {
         return (
             <div className="min-h-screen bg-white flex flex-col items-center justify-center p-12">
-                <h2 className="font-sans text-2xl uppercase tracking-widest mb-4">Residence Not Found</h2>
+                <h2 className="font-sans text-2xl uppercase tracking-widest mb-4">Residencia no encontrada</h2>
                 <Link to="/" className="text-sm border-b border-black pb-1 hover:opacity-50 transition-opacity">
-                    Return to Collection
+                    Volver a la Colección
                 </Link>
             </div>
         );
@@ -42,7 +42,7 @@ const PropertyDetail: React.FC = () => {
                 <Link to="/" className="flex items-center gap-3 group">
                     <ArrowLeft size={18} className="transition-transform group-hover:-translate-x-1" />
                     <span className="text-[10px] uppercase tracking-[0.2em] font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300 -translate-x-2 group-hover:translate-x-0">
-                        Collection
+                        Colección
                     </span>
                 </Link>
                 <div className="font-sans text-[10px] uppercase tracking-[0.2em] font-bold">
@@ -122,10 +122,10 @@ const PropertyDetail: React.FC = () => {
                             className="text-gray-500 font-serif leading-relaxed text-lg space-y-6"
                         >
                             <p>
-                                A residence that defies ordinary expectations. Every line, every texture, and every shadow has been deliberately curated to foster a sense of transcendent calm. The architecture does not merely contain space; it sculpts it.
+                                Una residencia que desafía las expectativas ordinarias. Cada línea, cada textura y cada sombra ha sido deliberadamente seleccionada para fomentar una sensación de calma trascendente. La arquitectura no se limita a contener el espacio; lo esculpe.
                             </p>
                             <p>
-                                Natural light floods the interiors through floor-to-ceiling glass, blurring the boundary between the sanctuary within and the world without. Materials are honest, raw, and unapologetically luxurious.
+                                La luz natural inunda los interiores a través de cristales de suelo a techo, difuminando el límite entre el santuario interior y el mundo exterior. Los materiales son honestos, crudos y descaradamente lujosos.
                             </p>
                         </motion.div>
                     </div>
@@ -140,7 +140,7 @@ const PropertyDetail: React.FC = () => {
                             className="bg-gray-50 p-12 border border-gray-100"
                         >
                             <div className="mb-10">
-                                <span className="text-[10px] uppercase tracking-widest text-gray-400 font-bold block mb-2">Price</span>
+                                <span className="text-[10px] uppercase tracking-widest text-gray-400 font-bold block mb-2">Precio</span>
                                 <span className="font-sans text-4xl block text-luxury-black">{property.price}</span>
                             </div>
 
@@ -148,28 +148,28 @@ const PropertyDetail: React.FC = () => {
                                 <div className="flex justify-between items-center py-4 border-b border-gray-200">
                                     <div className="flex items-center gap-3 text-gray-500">
                                         <Bed size={18} />
-                                        <span className="text-xs uppercase tracking-widest">Bedrooms</span>
+                                        <span className="text-xs uppercase tracking-widest">Dormitorios</span>
                                     </div>
                                     <span className="font-sans font-bold">{property.beds}</span>
                                 </div>
                                 <div className="flex justify-between items-center py-4 border-b border-gray-200">
                                     <div className="flex items-center gap-3 text-gray-500">
                                         <Bath size={18} />
-                                        <span className="text-xs uppercase tracking-widest">Bathrooms</span>
+                                        <span className="text-xs uppercase tracking-widest">Baños</span>
                                     </div>
                                     <span className="font-sans font-bold">{property.baths}</span>
                                 </div>
                                 <div className="flex justify-between items-center py-4 border-b border-gray-200">
                                     <div className="flex items-center gap-3 text-gray-500">
                                         <Move size={18} />
-                                        <span className="text-xs uppercase tracking-widest">Square Feet</span>
+                                        <span className="text-xs uppercase tracking-widest">Superficie</span>
                                     </div>
                                     <span className="font-sans font-bold">{property.sqft.toLocaleString()}</span>
                                 </div>
                                 <div className="flex justify-between items-center py-4 border-b border-gray-200">
                                     <div className="flex items-center gap-3 text-gray-500">
                                         <MapPin size={18} />
-                                        <span className="text-xs uppercase tracking-widest">Type</span>
+                                        <span className="text-xs uppercase tracking-widest">Tipo</span>
                                     </div>
                                     <span className="font-sans font-bold">{property.type}</span>
                                 </div>
@@ -179,7 +179,7 @@ const PropertyDetail: React.FC = () => {
                                 onClick={openModal}
                                 className="w-full mt-12 bg-luxury-black text-white py-4 px-6 flex items-center justify-center gap-3 hover:bg-gray-800 transition-all group"
                             >
-                                <span className="text-[10px] uppercase tracking-[0.2em] font-bold">Schedule Private Viewing</span>
+                                <span className="text-[10px] uppercase tracking-[0.2em] font-bold">Agendar Visita Privada</span>
                                 <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
                             </button>
                         </motion.div>
@@ -196,14 +196,14 @@ const PropertyDetail: React.FC = () => {
                 className="fixed bottom-0 left-0 w-full bg-white border-t border-gray-100 p-4 md:hidden z-40 flex justify-between items-center shadow-[0_-5px_20px_rgba(0,0,0,0.05)]"
             >
                 <div>
-                    <span className="text-[10px] uppercase tracking-widest text-gray-400 block">Price</span>
+                    <span className="text-[10px] uppercase tracking-widest text-gray-400 block">Precio</span>
                     <span className="font-sans text-xl font-bold">{property.price}</span>
                 </div>
                 <button
                     onClick={openModal}
                     className="bg-luxury-black text-white px-6 py-3 text-[10px] uppercase tracking-widest font-bold"
                 >
-                    Inquire
+                    Consultar
                 </button>
             </motion.div>
 

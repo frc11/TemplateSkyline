@@ -7,7 +7,7 @@ import { ChatMessage } from '../types';
 const VirtualConcierge: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([
-    { role: 'model', text: 'Welcome to Skyline Estates. I am your Virtual Concierge. How may I assist you in your pursuit of exceptional living?', timestamp: new Date() }
+    { role: 'model', text: 'Bienvenido a Skyline Estates. Soy tu Concierge Virtual. ¿En qué puedo asistirte en tu búsqueda de una vivienda excepcional?', timestamp: new Date() }
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -72,7 +72,7 @@ const VirtualConcierge: React.FC = () => {
             {/* Header */}
             <div className="p-4 border-b border-gray-100 flex justify-between items-center bg-gray-50/50 backdrop-blur-sm">
               <div>
-                <h3 className="uppercase tracking-architect text-[10px] font-bold text-gray-900">AI Concierge</h3>
+                <h3 className="uppercase tracking-architect text-[10px] font-bold text-gray-900">Concierge IA</h3>
               </div>
               <button onClick={() => setIsOpen(false)} className="text-gray-400 hover:text-gray-900 transition-colors">
                 <X size={16} strokeWidth={1.5} />
@@ -108,7 +108,7 @@ const VirtualConcierge: React.FC = () => {
                       transition={{ repeat: Infinity, duration: 1.5 }}
                       className="text-[10px] font-serif text-gray-500"
                     >
-                      Thinking...
+                      Pensando...
                     </motion.div>
                   </div>
                 </div>
@@ -124,7 +124,7 @@ const VirtualConcierge: React.FC = () => {
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-                  placeholder="Ask about details..."
+                  placeholder="Consultá sobre propiedades..."
                   className="w-full bg-gray-50 border-none p-3 pr-10 text-xs font-serif focus:ring-1 focus:ring-gray-200 outline-none transition-all placeholder:text-gray-400"
                 />
                 <button 

@@ -25,9 +25,9 @@ const InquiryForm: React.FC = () => {
                 >
                     <Check size={32} />
                 </motion.div>
-                <h3 className="font-sans text-xl uppercase tracking-widest font-bold mb-4">Message Received</h3>
+                <h3 className="font-sans text-xl uppercase tracking-widest font-bold mb-4">Consulta Recibida</h3>
                 <p className="font-serif text-gray-500">
-                    Our concierge team has received your inquiry and will contact you shortly to coordinate your private viewing.
+                    Nuestro equipo recibió tu consulta y se comunicará a la brevedad para coordinar tu visita privada.
                 </p>
             </div>
         );
@@ -36,15 +36,15 @@ const InquiryForm: React.FC = () => {
     return (
         <form onSubmit={handleSubmit} className="space-y-8">
             <div className="text-center mb-10">
-                <h3 className="font-sans text-2xl uppercase tracking-widest font-light mb-2">Private Viewing</h3>
-                <p className="font-serif text-gray-400 italic text-sm">Please provide your details below.</p>
+                <h3 className="font-sans text-2xl uppercase tracking-widest font-light mb-2">Visita Privada</h3>
+                <p className="font-serif text-gray-400 italic text-sm">Completá tus datos a continuación.</p>
             </div>
 
             <div className="space-y-6">
                 <div className="relative">
                     <input
                         type="text"
-                        placeholder="Full Name"
+                        placeholder="Nombre Completo"
                         required
                         className="w-full py-3 border-b border-gray-200 text-luxury-black bg-transparent focus:border-luxury-black focus:outline-none transition-colors placeholder:text-gray-300 font-serif"
                     />
@@ -52,7 +52,7 @@ const InquiryForm: React.FC = () => {
                 <div className="relative">
                     <input
                         type="email"
-                        placeholder="Email Address"
+                        placeholder="Correo Electrónico"
                         required
                         className="w-full py-3 border-b border-gray-200 text-luxury-black bg-transparent focus:border-luxury-black focus:outline-none transition-colors placeholder:text-gray-300 font-serif"
                     />
@@ -60,14 +60,14 @@ const InquiryForm: React.FC = () => {
                 <div className="relative">
                     <input
                         type="tel"
-                        placeholder="Phone Number"
+                        placeholder="Teléfono"
                         className="w-full py-3 border-b border-gray-200 text-luxury-black bg-transparent focus:border-luxury-black focus:outline-none transition-colors placeholder:text-gray-300 font-serif"
                     />
                 </div>
                 <div className="relative">
                     <textarea
                         rows={3}
-                        placeholder="Message (Optional)"
+                        placeholder="Mensaje (Opcional)"
                         className="w-full py-3 border-b border-gray-200 text-luxury-black bg-transparent focus:border-luxury-black focus:outline-none transition-colors placeholder:text-gray-300 font-serif resize-none"
                     />
                 </div>
@@ -82,7 +82,7 @@ const InquiryForm: React.FC = () => {
                     <Loader2 size={16} className="animate-spin" />
                 ) : (
                     <>
-                        <span className="text-[10px] uppercase tracking-[0.2em] font-bold">Request Access</span>
+                        <span className="text-[10px] uppercase tracking-[0.2em] font-bold">Solicitar Visita</span>
                         <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
                     </>
                 )}

@@ -58,10 +58,10 @@ const AgentCard: React.FC = () => {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              onClick={openModal}
+              onClick={() => openModal()}
               className="flex items-center gap-2 px-6 py-3 bg-white text-luxury-black rounded-sm text-xs font-sans font-bold uppercase tracking-wider hover:bg-gray-200 transition-colors"
             >
-              <span>Schedule Viewing</span>
+              <span>Agendar visita</span>
               <ArrowRight size={14} />
             </motion.button>
           </div>

@@ -23,7 +23,7 @@ const ApplicationForm: React.FC = () => {
             if (selectedFile.type === 'application/pdf') {
                 setFile(selectedFile);
             } else {
-                alert('Please upload a PDF file.');
+                alert('Por favor subí un archivo PDF.');
             }
         }
     };
@@ -38,9 +38,9 @@ const ApplicationForm: React.FC = () => {
                 <div className="w-20 h-20 bg-luxury-black rounded-full flex items-center justify-center mb-8">
                     <Check className="text-white" size={32} />
                 </div>
-                <h3 className="font-sans text-2xl uppercase tracking-tighter mb-4 text-luxury-black">Application Received</h3>
+                <h3 className="font-sans text-2xl uppercase tracking-tighter mb-4 text-luxury-black">Postulación Recibida</h3>
                 <p className="font-serif text-gray-500 max-w-xs mx-auto italic">
-                    Our talent acquisition team will review your CV and contact you shortly if your profile matches the role.
+                    Nuestro equipo revisará tu CV y se pondrá en contacto si tu perfil se ajusta al puesto.
                 </p>
             </motion.div>
         );
@@ -49,8 +49,8 @@ const ApplicationForm: React.FC = () => {
     return (
         <div className="py-8">
             <div className="mb-12">
-                <span className="font-sans text-[10px] uppercase tracking-[0.3em] font-bold text-gray-400 mb-4 block">Careers</span>
-                <h2 className="font-sans text-3xl uppercase tracking-tighter text-luxury-black">Apply Now</h2>
+                <span className="font-sans text-[10px] uppercase tracking-[0.3em] font-bold text-gray-400 mb-4 block">Empleos</span>
+                <h2 className="font-sans text-3xl uppercase tracking-tighter text-luxury-black">Postularse</h2>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-8">
@@ -63,7 +63,7 @@ const ApplicationForm: React.FC = () => {
                             placeholder=" "
                         />
                         <label className="absolute left-0 top-4 font-serif text-gray-400 pointer-events-none transition-all peer-focus:-top-4 peer-focus:text-xs peer-focus:text-luxury-black peer-[:not(:placeholder-shown)]:-top-4 peer-[:not(:placeholder-shown)]:text-xs">
-                            Full Name
+                            Nombre Completo
                         </label>
                     </div>
 
@@ -75,12 +75,12 @@ const ApplicationForm: React.FC = () => {
                             placeholder=" "
                         />
                         <label className="absolute left-0 top-4 font-serif text-gray-400 pointer-events-none transition-all peer-focus:-top-4 peer-focus:text-xs peer-focus:text-luxury-black peer-[:not(:placeholder-shown)]:-top-4 peer-[:not(:placeholder-shown)]:text-xs">
-                            Email Address
+                            Correo Electrónico
                         </label>
                     </div>
 
                     <div className="relative">
-                        <label className="font-sans text-[10px] uppercase tracking-widest font-bold text-gray-400 mb-4 block">Attach CV (PDF)</label>
+                        <label className="font-sans text-[10px] uppercase tracking-widest font-bold text-gray-400 mb-4 block">Adjuntar CV (PDF)</label>
                         <div 
                             onClick={() => fileInputRef.current?.click()}
                             className={`border-2 border-dashed rounded-sm p-8 flex flex-col items-center justify-center cursor-pointer transition-all ${
@@ -116,7 +116,7 @@ const ApplicationForm: React.FC = () => {
                             ) : (
                                 <>
                                     <Upload className="text-gray-300 mb-4" size={32} />
-                                    <p className="font-serif text-sm text-gray-500 italic">Click or drag your PDF CV here</p>
+                                    <p className="font-serif text-sm text-gray-500 italic">Hacé clic o arrastrá tu CV en PDF aquí</p>
                                 </>
                             )}
                         </div>
@@ -130,7 +130,7 @@ const ApplicationForm: React.FC = () => {
                         className="w-full bg-luxury-black text-white py-6 px-12 font-sans text-xs font-bold uppercase tracking-[0.2em] relative overflow-hidden group disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         <span className={`flex items-center justify-center gap-4 transition-transform duration-500 ${isSubmitting ? '-translate-y-20' : ''}`}>
-                            Submit Application
+                            Enviar Postulación
                             <Send size={14} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                         </span>
                         
@@ -146,7 +146,7 @@ const ApplicationForm: React.FC = () => {
                     </button>
                     {!file && (
                         <p className="text-center font-serif text-[10px] text-gray-400 italic mt-4">
-                            Please attach your CV to proceed
+                            Adjuntá tu CV para continuar
                         </p>
                     )}
                 </div>

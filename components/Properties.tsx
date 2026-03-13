@@ -49,7 +49,7 @@ const PropertyCard: React.FC<{ property: PropertyData, index: number, highlighte
             : 'bg-white/90 backdrop-blur-sm text-luxury-black'
             }`}>
             <span className="text-[10px] uppercase tracking-widest font-bold">
-              {property.status === 'rent' ? 'For Rent' : 'For Sale'}
+              {property.status === 'rent' ? 'Alquiler' : 'Venta'}
             </span>
           </div>
 
@@ -57,7 +57,7 @@ const PropertyCard: React.FC<{ property: PropertyData, index: number, highlighte
           {property.isNewDevelopment && (
             <div className="absolute bottom-4 left-4 bg-gradient-to-r from-amber-500 to-amber-600 text-white px-3 py-1">
               <span className="text-[10px] uppercase tracking-widest font-bold">
-                New Development
+                Nuevo Desarrollo
               </span>
             </div>
           )}
@@ -75,7 +75,7 @@ const PropertyCard: React.FC<{ property: PropertyData, index: number, highlighte
             <motion.div
               className="mt-2 inline-flex items-center opacity-0 group-hover:opacity-100 transition-opacity duration-500"
             >
-              <span className="text-[10px] uppercase tracking-widest mr-2">View</span>
+              <span className="text-[10px] uppercase tracking-widest mr-2">Ver</span>
               <ArrowUpRight size={14} />
             </motion.div>
           </div>
@@ -91,22 +91,72 @@ const FilterSelect: React.FC<{
   options: string[];
   onChange: (val: string) => void;
   ariaLabel?: string;
-}> = ({ label, value, options, onChange, ariaLabel }) => (
-  <div className="relative group">
-    <select
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-      aria-label={ariaLabel || label}
-      className="appearance-none bg-transparent border border-gray-200 pl-4 pr-10 py-3 w-full md:w-48 text-xs font-sans font-bold uppercase tracking-wider text-luxury-black focus:outline-none focus:border-luxury-black focus:ring-2 focus:ring-luxury-black focus:ring-offset-2 hover:border-gray-400 transition-colors cursor-pointer rounded-sm"
-    >
-      <option value="all">{label}</option>
-      {options.map(opt => (
-        <option key={opt} value={opt}>{opt}</option>
-      ))}
-    </select>
-    <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none group-hover:text-luxury-black transition-colors" />
-  </div>
-);
+}> = ({ label, value, options, onChange, ariaLabel }) => {
+  const [isOpen, setIsOpen] = React.useState(false);
+  const ref = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setIsOpen(false);
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, []);
+
+  const displayValue = value === 'all' ? label : value;
+  const isActive = value !== 'all';
+
+  return (
+    <div ref={ref} className="relative">
+      <button
+        aria-label={ariaLabel || label}
+        aria-expanded={isOpen}
+        onClick={() => setIsOpen(prev => !prev)}
+        className={`flex items-center gap-3 border py-[10px] pl-4 pr-3 w-full md:w-48 text-xs font-sans font-bold uppercase tracking-wider transition-colors cursor-pointer ${isActive
+          ? 'border-luxury-black text-luxury-black bg-luxury-black/[0.03]'
+          : 'border-gray-200 text-luxury-black hover:border-gray-400'
+          }`}
+      >
+        <span className="flex-1 text-left truncate">{displayValue}</span>
+        <motion.span animate={{ rotate: isOpen ? 180 : 0 }} transition={{ duration: 0.25 }}>
+          <ChevronDown size={12} className={isActive ? 'text-luxury-black' : 'text-gray-400'} />
+        </motion.span>
+      </button>
+
+      <AnimatePresence>
+        {isOpen && (
+          <motion.ul
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 6 }}
+            transition={{ duration: 0.18, ease: 'easeOut' }}
+            className="absolute top-full left-0 mt-1 w-full min-w-[180px] bg-white border border-gray-100 shadow-xl z-50 py-1"
+            role="listbox"
+          >
+            <li>
+              <button
+                className={`w-full text-left px-4 py-2.5 font-sans text-xs uppercase tracking-wider transition-colors ${value === 'all' ? 'text-luxury-black font-bold bg-gray-50' : 'text-gray-400 hover:text-luxury-black hover:bg-gray-50'}`}
+                onClick={() => { onChange('all'); setIsOpen(false); }}
+              >
+                {label}
+              </button>
+            </li>
+            {options.map(opt => (
+              <li key={opt}>
+                <button
+                  className={`w-full text-left px-4 py-2.5 font-sans text-xs uppercase tracking-wider transition-colors ${value === opt ? 'text-luxury-black font-bold bg-gray-50' : 'text-gray-400 hover:text-luxury-black hover:bg-gray-50'}`}
+                  onClick={() => { onChange(opt); setIsOpen(false); }}
+                >
+                  {opt}
+                </button>
+              </li>
+            ))}
+          </motion.ul>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
 
 const Properties: React.FC = () => {
   const [viewMode, setViewMode] = useState<'grid' | 'map'>('grid');
@@ -143,16 +193,16 @@ const Properties: React.FC = () => {
       setTitle({ main: <>New <br /></>, sub: <>Developments</> });
     } else if (collection === 'penthouses') {
       setSection({ status: 'all', collection: 'penthouses' });
-      setTitle({ main: <>Penthouse <br /></>, sub: <>Collection</> });
+      setTitle({ main: <>Colección <br /></>, sub: <>Penthouse</> });
     } else if (mode === 'rent') {
       setSection({ status: 'rent', collection: 'all' });
-      setTitle({ main: <>Luxury <br /></>, sub: <>Rentals</> });
+      setTitle({ main: <>Alquileres <br /></>, sub: <>de Lujo</> });
     } else if (mode === 'sale') {
       setSection({ status: 'sale', collection: 'all' });
-      setTitle({ main: <>Curated <br /></>, sub: <>For Sale</> });
+      setTitle({ main: <>Propiedades <br /></>, sub: <>en Venta</> });
     } else {
       setSection({ status: 'all', collection: 'all' });
-      setTitle({ main: <>Curated <br /></>, sub: <>Residences</> });
+      setTitle({ main: <>Todas las <br /></>, sub: <>Residencias</> });
     }
 
     // Preserve any location/type/price filters passed from the Hero landing form
@@ -185,9 +235,9 @@ const Properties: React.FC = () => {
   // Exclude 'Penthouse' — it has its own dedicated section, not a type filter
   const types = useMemo(() => Array.from(new Set(PROPERTIES.map(p => p.type))).filter(t => t !== 'Penthouse'), []);
   const priceRanges = [
-    { label: 'Under $10M', value: 'under-10' },
+    { label: 'Menos de $10M', value: 'under-10' },
     { label: '$10M - $30M', value: '10-30' },
-    { label: 'Above $30M', value: 'above-30' },
+    { label: 'Más de $30M', value: 'above-30' },
   ];
 
   // Combined filter logic: section is always applied, user filters stack on top
@@ -258,109 +308,105 @@ const Properties: React.FC = () => {
           transition={{ duration: 0.8, delay: 0.2 }}
           className="font-serif text-gray-500 max-w-sm text-right mt-8 md:mt-0"
         >
-          A collection of homes where space, light, and materiality converge to create timeless living environments.
+          Una colección de viviendas donde el espacio, la luz y la materialidad convergen para crear ambientes de vida atemporales.
         </motion.p>
       </div>
 
       {/* Toolbar — hidden for curated sections like Penthouse Collection */}
       {section.collection !== 'penthouses' && (
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        className="mb-16 flex flex-col xl:flex-row gap-8 items-start xl:items-center justify-between border-y border-gray-100 py-6"
-      >
-        {/* Filters */}
-        <div className="flex flex-col md:flex-row gap-4 w-full md:w-auto">
-          <div className="flex items-center gap-2 mr-4 text-gray-400">
-            <Filter size={14} />
-            <span className="text-[10px] uppercase tracking-widest font-bold">Filter By</span>
-          </div>
-          <FilterSelect
-            label="Location"
-            value={userFilters.location}
-            options={locations}
-            onChange={(val) => setUserFilters(prev => ({ ...prev, location: val }))}
-            ariaLabel="Filter properties by location"
-          />
-          <FilterSelect
-            label="Type"
-            value={userFilters.type}
-            options={types}
-            onChange={(val) => setUserFilters(prev => ({ ...prev, type: val }))}
-            ariaLabel="Filter properties by type"
-          />
-          <div className="relative group w-full md:w-auto">
-            <select
-              value={userFilters.price}
-              onChange={(e) => setUserFilters(prev => ({ ...prev, price: e.target.value }))}
-              aria-label="Filter properties by price range"
-              className="appearance-none bg-transparent border border-gray-200 pl-4 pr-10 py-3 w-full md:w-48 text-xs font-sans font-bold uppercase tracking-wider text-luxury-black focus:outline-none focus:border-luxury-black focus:ring-2 focus:ring-luxury-black focus:ring-offset-2 hover:border-gray-400 transition-colors cursor-pointer rounded-sm"
-            >
-              <option value="all">Price Range</option>
-              {priceRanges.map(opt => (
-                <option key={opt.value} value={opt.value}>{opt.label}</option>
-              ))}
-            </select>
-            <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none group-hover:text-luxury-black transition-colors" />
-          </div>
-        </div>
-
-        <div className="flex items-center justify-between w-full xl:w-auto gap-6">
-          {/* View Toggle */}
-          <div className="flex items-center bg-gray-50 p-1 rounded-sm border border-gray-100">
-            <button
-              onClick={() => setViewMode('grid')}
-              aria-label="Switch to grid view"
-              aria-pressed={viewMode === 'grid'}
-              className={`flex items-center gap-2 px-4 py-2 rounded-sm text-[10px] uppercase tracking-widest font-bold transition-all ${viewMode === 'grid'
-                ? 'bg-white text-luxury-black shadow-sm'
-                : 'text-gray-400 hover:text-gray-600'
-                }`}
-            >
-              <GridIcon size={14} />
-              <span>List</span>
-            </button>
-            <button
-              onClick={() => setViewMode('map')}
-              aria-label="Switch to map view"
-              aria-pressed={viewMode === 'map'}
-              className={`flex items-center gap-2 px-4 py-2 rounded-sm text-[10px] uppercase tracking-widest font-bold transition-all ${viewMode === 'map'
-                ? 'bg-white text-luxury-black shadow-sm'
-                : 'text-gray-400 hover:text-gray-600'
-                }`}
-            >
-              <MapIcon size={14} />
-              <span>Map</span>
-            </button>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="mb-16 flex flex-col xl:flex-row gap-8 items-start xl:items-center justify-between border-y border-gray-100 py-6"
+        >
+          {/* Filters */}
+          <div className="flex flex-col md:flex-row gap-4 w-full md:w-auto">
+            <div className="flex items-center gap-2 mr-4 text-gray-400">
+              <Filter size={14} />
+              <span className="text-[10px] uppercase tracking-widest font-bold">Filtrar</span>
+            </div>
+            <FilterSelect
+              label="Ubicación"
+              value={userFilters.location}
+              options={locations}
+              onChange={(val) => setUserFilters(prev => ({ ...prev, location: val }))}
+              ariaLabel="Filtrar propiedades por ubicación"
+            />
+            <FilterSelect
+              label="Tipo"
+              value={userFilters.type}
+              options={types}
+              onChange={(val) => setUserFilters(prev => ({ ...prev, type: val }))}
+              ariaLabel="Filtrar propiedades por tipo"
+            />
+            <FilterSelect
+              label="Precio"
+              value={userFilters.price === 'all' ? 'all' : (priceRanges.find(r => r.value === userFilters.price)?.label ?? 'all')}
+              options={priceRanges.map(r => r.label)}
+              onChange={(val) => {
+                const found = priceRanges.find(r => r.label === val);
+                setUserFilters(prev => ({ ...prev, price: found ? found.value : 'all' }));
+              }}
+              ariaLabel="Filtrar propiedades por precio"
+            />
           </div>
 
-          {/* Clear Filters */}
-          <AnimatePresence>
-            {activeFilterCount > 0 && (
-              <motion.button
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 1.1, filter: "blur(4px)" }}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => setUserFilters({ location: 'all', type: 'all', price: 'all' })}
-                aria-label={`Clear ${activeFilterCount} active filter${activeFilterCount > 1 ? 's' : ''}`}
-                className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 shadow-sm rounded-full group hover:border-red-200 transition-colors focus:outline-none focus:ring-2 focus:ring-red-300 focus:ring-offset-2"
-                id="clear-filters-btn"
+          <div className="flex items-center justify-between w-full xl:w-auto gap-6">
+            {/* View Toggle */}
+            <div className="flex items-center bg-gray-50 p-1 rounded-sm border border-gray-100">
+              <button
+                onClick={() => setViewMode('grid')}
+                aria-label="Switch to grid view"
+                aria-pressed={viewMode === 'grid'}
+                className={`flex items-center gap-2 px-4 py-2 rounded-sm text-[10px] uppercase tracking-widest font-bold transition-all ${viewMode === 'grid'
+                  ? 'bg-white text-luxury-black shadow-sm'
+                  : 'text-gray-400 hover:text-gray-600'
+                  }`}
               >
-                <span className="text-[10px] font-sans font-bold uppercase tracking-widest text-gray-500 group-hover:text-red-500 transition-colors">
-                  Clear Filters
-                </span>
-                <span className="flex items-center justify-center w-5 h-5 bg-gray-100 text-gray-600 rounded-full text-[10px] font-bold group-hover:bg-red-50 group-hover:text-red-500 transition-colors">
-                  {activeFilterCount}
-                </span>
-                <X size={12} className="text-gray-400 group-hover:text-red-500 transition-colors" />
-              </motion.button>
-            )}
-          </AnimatePresence>
-        </div>
-      </motion.div>
+                <GridIcon size={14} />
+                <span>Lista</span>
+              </button>
+              <button
+                onClick={() => setViewMode('map')}
+                aria-label="Switch to map view"
+                aria-pressed={viewMode === 'map'}
+                className={`flex items-center gap-2 px-4 py-2 rounded-sm text-[10px] uppercase tracking-widest font-bold transition-all ${viewMode === 'map'
+                  ? 'bg-white text-luxury-black shadow-sm'
+                  : 'text-gray-400 hover:text-gray-600'
+                  }`}
+              >
+                <MapIcon size={14} />
+                <span>Mapa</span>
+              </button>
+            </div>
+
+            {/* Clear Filters */}
+            <AnimatePresence>
+              {activeFilterCount > 0 && (
+                <motion.button
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 1.1, filter: "blur(4px)" }}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => setUserFilters({ location: 'all', type: 'all', price: 'all' })}
+                  aria-label={`Clear ${activeFilterCount} active filter${activeFilterCount > 1 ? 's' : ''}`}
+                  className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 shadow-sm rounded-full group hover:border-red-200 transition-colors focus:outline-none focus:ring-2 focus:ring-red-300 focus:ring-offset-2"
+                  id="clear-filters-btn"
+                >
+                  <span className="text-[10px] font-sans font-bold uppercase tracking-widest text-gray-500 group-hover:text-red-500 transition-colors">
+                    Limpiar filtros
+                  </span>
+                  <span className="flex items-center justify-center w-5 h-5 bg-gray-100 text-gray-600 rounded-full text-[10px] font-bold group-hover:bg-red-50 group-hover:text-red-500 transition-colors">
+                    {activeFilterCount}
+                  </span>
+                  <X size={12} className="text-gray-400 group-hover:text-red-500 transition-colors" />
+                </motion.button>
+              )}
+            </AnimatePresence>
+          </div>
+        </motion.div>
       )}
 
       {/* Penthouse section: minimal view toggle only, no filters */}
@@ -375,20 +421,18 @@ const Properties: React.FC = () => {
             <button
               onClick={() => setViewMode('grid')}
               aria-label="Switch to grid view"
-              className={`flex items-center gap-2 px-4 py-2 rounded-sm text-[10px] uppercase tracking-widest font-bold transition-all ${
-                viewMode === 'grid' ? 'bg-white text-luxury-black shadow-sm' : 'text-gray-400 hover:text-gray-600'
-              }`}
+              className={`flex items-center gap-2 px-4 py-2 rounded-sm text-[10px] uppercase tracking-widest font-bold transition-all ${viewMode === 'grid' ? 'bg-white text-luxury-black shadow-sm' : 'text-gray-400 hover:text-gray-600'
+                }`}
             >
-              <GridIcon size={14} /><span>List</span>
+              <GridIcon size={14} /><span>Lista</span>
             </button>
             <button
               onClick={() => setViewMode('map')}
               aria-label="Switch to map view"
-              className={`flex items-center gap-2 px-4 py-2 rounded-sm text-[10px] uppercase tracking-widest font-bold transition-all ${
-                viewMode === 'map' ? 'bg-white text-luxury-black shadow-sm' : 'text-gray-400 hover:text-gray-600'
-              }`}
+              className={`flex items-center gap-2 px-4 py-2 rounded-sm text-[10px] uppercase tracking-widest font-bold transition-all ${viewMode === 'map' ? 'bg-white text-luxury-black shadow-sm' : 'text-gray-400 hover:text-gray-600'
+                }`}
             >
-              <MapIcon size={14} /><span>Map</span>
+              <MapIcon size={14} /><span>Mapa</span>
             </button>
           </div>
         </motion.div>
@@ -430,11 +474,11 @@ const Properties: React.FC = () => {
                   </div>
 
                   {/* Message */}
-                  <p className="font-serif text-3xl text-gray-400 italic mb-4">No residences found.</p>
+                  <p className="font-serif text-3xl text-gray-400 italic mb-4">No se encontraron propiedades.</p>
                   <p className="font-sans text-sm text-gray-500 max-w-md mb-8">
                     {activeFilterCount > 0
-                      ? "Try adjusting your filters or search criteria to see more properties."
-                      : "We couldn't find any properties matching your current selection."}
+                      ? "Intenta ajustar tus filtros o criterios de búsqueda para ver más propiedades."
+                      : "No pudimos encontrar propiedades que coincidan con tu selección actual."}
                   </p>
 
                   {/* Actions */}
@@ -444,14 +488,14 @@ const Properties: React.FC = () => {
                       className="flex items-center gap-2 px-6 py-3 bg-luxury-black text-white text-xs font-sans font-bold uppercase tracking-widest hover:bg-gray-800 transition-colors"
                     >
                       <X size={14} />
-                      Clear All Filters
+                      Limpiar filtros
                     </button>
                   ) : (
                     <Link
                       to="/"
                       className="px-6 py-3 border border-luxury-black text-luxury-black text-xs font-sans font-bold uppercase tracking-widest hover:bg-luxury-black hover:text-white transition-colors"
                     >
-                      View All Properties
+                      Ver todas las propiedades
                     </Link>
                   )}
                 </motion.div>

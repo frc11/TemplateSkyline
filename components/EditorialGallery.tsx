@@ -43,10 +43,10 @@ const EditorialGallery: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col items-center mb-32">
         <span className="font-sans text-xs font-bold uppercase tracking-architect text-gray-400 mb-4">
-          The Collection
+          La Colección
         </span>
         <h2 className="font-serif text-4xl md:text-5xl text-luxury-black text-center">
-          Designed for life <br /> <span className="italic text-gray-400">lived beautifully.</span>
+          Diseñado para una vida <br /> <span className="italic text-gray-400">vivida con belleza.</span>
         </h2>
       </div>
 
@@ -66,12 +66,12 @@ const EditorialGallery: React.FC = () => {
               01
             </h3>
             <div className="border-t border-luxury-black pt-6 mt-2">
-              <h4 className="font-serif text-2xl text-luxury-black mb-2">Culinary Sanctuary</h4>
+              <h4 className="font-serif text-2xl text-luxury-black mb-2">Santuario Culinario</h4>
               <p className="font-sans text-xs text-gray-400 uppercase tracking-widest mb-6">
                 Poliform Alea Pro / Gaggenau 400
               </p>
               <p className="font-serif text-gray-600 leading-relaxed text-sm max-w-xs">
-                A kitchen designed not just for cooking, but for performance. Featuring matte charcoal cabinetry and integrated lighting systems that respond to the time of day.
+                Una cocina diseñada no solo para cocinar, sino para el rendimiento. Con muebles en carbón mate y sistemas de iluminación integrados que responden a la hora del día.
               </p>
             </div>
           </div>
@@ -84,12 +84,12 @@ const EditorialGallery: React.FC = () => {
               02
             </h3>
             <div className="border-t border-luxury-black pt-6 mt-2">
-              <h4 className="font-serif text-2xl text-luxury-black mb-2">Private Spa</h4>
+              <h4 className="font-serif text-2xl text-luxury-black mb-2">Spa Privado</h4>
               <p className="font-sans text-xs text-gray-400 uppercase tracking-widest mb-6">
-                Travertine Silver / Rain Sky
+                Travertino Plateado / Lluvia Cielo
               </p>
               <p className="font-serif text-gray-600 leading-relaxed text-sm max-w-xs ml-auto md:ml-0">
-                The primary bath is wrapped in silver travertine slabs, matched by book. The freestanding tub is positioned to capture the skyline while maintaining absolute privacy.
+                El baño principal está revestido de travertino plateado en losas emparejadas por libro. La bañera exenta está posicionada para capturar las vistas mientras se mantiene absoluta privacidad.
               </p>
             </div>
           </div>
@@ -116,12 +116,12 @@ const EditorialGallery: React.FC = () => {
               03
             </h3>
             <div className="border-t border-luxury-black pt-6 mt-2">
-              <h4 className="font-serif text-2xl text-luxury-black mb-2">The Lounge</h4>
+              <h4 className="font-serif text-2xl text-luxury-black mb-2">El Salón</h4>
               <p className="font-sans text-xs text-gray-400 uppercase tracking-widest mb-6">
-                Zero-Threshold Glass / Boffi Outdoor
+                Vidrio de Umbral Cero / Boffi Exterior
               </p>
               <p className="font-serif text-gray-600 leading-relaxed text-sm max-w-xs">
-                An open expanse designed for hosting. The boundaries between interior and exterior dissolve with zero-threshold sliding glass walls.
+                Un espacio abierto diseñado para recibir. Los límites entre interior y exterior se disuelven con paredes de vidrio corredizas de umbral cero.
               </p>
             </div>
           </div>

@@ -29,25 +29,25 @@ const Fade: React.FC<{ children: React.ReactNode; delay?: number; className?: st
 const BuyContent: React.FC = () => {
   const { openModal } = useModal();
   const reasons = [
-    { icon: <Home size={20} />, title: 'Build Equity', text: 'Every payment compounds your net worth. Owning is the original wealth-building instrument.' },
-    { icon: <TrendingUp size={20} />, title: 'Asset Appreciation', text: 'Prime real estate in New York has averaged 6–9% annual appreciation over the last decade.' },
-    { icon: <Key size={20} />, title: 'Total Freedom', text: 'Renovate, decorate, or reinvent the space on your terms — it is yours, unconditionally.' },
-    { icon: <BarChart3 size={20} />, title: 'Leverage & Tax Benefits', text: 'Mortgage interest deductions and 1031 exchanges reduce your effective cost of ownership.' },
+    { icon: <Home size={20} />, title: 'Construí Patrimonio', text: 'Cada cuota incrementa tu capital neto. La propiedad es el instrumento de generación de riqueza más sólido de Argentina.' },
+    { icon: <TrendingUp size={20} />, title: 'Valorización Constante', text: 'El inmobiliario premium en Tucumán ha mostrado una apreciación sostenida, sirviendo como reserva de valor frente a la inflación.' },
+    { icon: <Key size={20} />, title: 'Libertad Total', text: 'Renovar, decorar y reinventar tu espacio según tus términos — es tuyo, sin condiciones.' },
+    { icon: <BarChart3 size={20} />, title: 'Protección frente a la Inflación', text: 'Los inmuebles en dólares históricamente han preservado el poder adquisitivo mejor que cualquier otro activo local.' },
   ];
 
   const quotes = [
-    { text: 'Ninety percent of all millionaires become so through owning real estate.', author: 'Andrew Carnegie' },
-    { text: 'The best time to buy a home is always five years ago.', author: 'Ray Brown' },
-    { text: 'Real estate cannot be lost or stolen, nor can it be carried away.', author: 'Franklin D. Roosevelt' },
+    { text: 'Noventa por ciento de todos los millonarios lograron su fortuna a través de la propiedad inmobiliaria.', author: 'Andrew Carnegie' },
+    { text: 'El mejor momento para comprar una propiedad siempre fue hace cinco años.', author: 'Ray Brown' },
+    { text: 'Los bienes raíces no pueden perderse, robarse, ni llevarse. Comprados con sentido común, son una de las inversiones más seguras del mundo.', author: 'Franklin D. Roosevelt' },
   ];
 
   return (
     <section className="py-32 px-6 md:px-24 bg-white border-t border-gray-100 relative z-10">
       {/* Header */}
       <Fade>
-        <span className="font-sans text-xs font-bold uppercase tracking-architect text-gray-400">Why Own</span>
+        <span className="font-sans text-xs font-bold uppercase tracking-architect text-gray-400">Por qué Comprar</span>
         <h2 className="font-sans text-4xl md:text-5xl uppercase tracking-tight font-light text-luxury-black mt-4 mb-2">
-          The case for <br /><span className="font-serif italic text-gray-400 lowercase">ownership</span>
+          El argumento a favor de <br /><span className="font-serif italic text-gray-400 lowercase">ser propietario</span>
         </h2>
       </Fade>
 
@@ -84,16 +84,16 @@ const BuyContent: React.FC = () => {
       <Fade delay={0.3} className="mt-24">
         <div className="flex flex-col md:flex-row items-center justify-between border-y border-gray-100 py-10 gap-6">
           <div>
-            <p className="font-sans text-xs uppercase tracking-widest text-gray-400 mb-2">Ready to take the step?</p>
-            <h3 className="font-serif text-2xl text-luxury-black">Start your journey today.</h3>
+            <p className="font-sans text-xs uppercase tracking-widest text-gray-400 mb-2">¿Listo para dar el paso?</p>
+            <h3 className="font-serif text-2xl text-luxury-black">Comenzá tu búsqueda hoy.</h3>
           </div>
           <motion.button
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
-            onClick={openModal}
+            onClick={() => openModal()}
             className="flex items-center gap-3 px-8 py-4 bg-luxury-black text-white font-sans text-xs uppercase tracking-widest hover:bg-gray-900 transition-colors"
           >
-            <span>Schedule a Private Viewing</span>
+            <span>Agendar una Visita Privada</span>
             <ArrowUpRight size={14} />
           </motion.button>
         </div>
@@ -105,33 +105,33 @@ const BuyContent: React.FC = () => {
 /* ─── RENT SECTION ────────────────────────────────────────── */
 const RentContent: React.FC = () => {
   const pros = [
-    'Zero maintenance costs — everything is handled',
-    'Complete flexibility to relocate when your life demands it',
-    'No exposure to market downturns or property devaluations',
-    'Live in neighborhoods you couldn\'t otherwise afford to buy in',
-    'No capital locked in — invest the difference elsewhere',
+    'Sin gastos de mantenimiento — todo está a cargo del propietario',
+    'Flexibilidad total para mudarse cuando tu vida lo requiera',
+    'Sin exposición a caídas del mercado ni devaluaciones del activo',
+    'Vivir en barrios premium a los que no podrías acceder comprando',
+    'Sin capital inmovilizado — invertí la diferencia donde más rinda',
   ];
   const cons = [
-    'Rent payments build no equity for you',
-    'Lease renewals can bring unpredictable rent increases',
-    'Customisation and renovation options are limited',
-    'Long term cost often exceeds ownership when held 10+ years',
-    'You are subject to the landlord\'s decisions about the property',
+    'Los alquileres no generan patrimonio propio',
+    'Las renovaciones de contrato pueden traer aumentos imprevistos',
+    'Las opciones de personalización y reforma son limitadas',
+    'El costo total a largo plazo suele superar al de la compra en 10+ años',
+    'Quedás sujeto a las decisiones del propietario sobre el inmueble',
   ];
 
   const lifestylePerks = [
-    { title: 'Curated Concierge', text: 'Full-service buildings with doormen, valet, and 24/7 maintenance teams.' },
-    { title: 'No Commitment', text: 'Move when your career, family, or simply your mood calls for a change of scenery.' },
-    { title: 'Premium Locations', text: 'Rent in a Tribeca penthouse for the price of a mortgage in a lesser district.' },
-    { title: 'Furnished Options', text: 'Turnkey residences with designer furniture included — arrive with a suitcase.' },
+    { title: 'Conserjería Curada', text: 'Edificios de servicio completo con portería, valet y equipos de mantenimiento permanente.' },
+    { title: 'Sin Compromiso', text: 'Mudáte cuando tu carrera, tu familia o simplemente tus ganas de cambio lo pidan.' },
+    { title: 'Ubicaciones Prime', text: 'Alquilá en los barrios más exclusivos de Tucumán por el valor de una cuota en otro lugar.' },
+    { title: 'Opciones Amobladas', text: 'Unidades llave en mano con mobiliario de diseño incluido — llegá con una valija.' },
   ];
 
   return (
     <section className="py-32 px-6 md:px-24 bg-white border-t border-gray-100 relative z-10">
       <Fade>
-        <span className="font-sans text-xs font-bold uppercase tracking-architect text-gray-400">Renting Guide</span>
+        <span className="font-sans text-xs font-bold uppercase tracking-architect text-gray-400">Guía de Alquiler</span>
         <h2 className="font-sans text-4xl md:text-5xl uppercase tracking-tight font-light text-luxury-black mt-4">
-          The honest <br /><span className="font-serif italic text-gray-400 lowercase">guide to renting</span>
+          La guía honesta <br /><span className="font-serif italic text-gray-400 lowercase">sobre el alquiler</span>
         </h2>
       </Fade>
 
@@ -140,7 +140,7 @@ const RentContent: React.FC = () => {
         <Fade delay={0.1}>
           <div>
             <h3 className="font-sans text-xs font-bold uppercase tracking-widest text-luxury-black mb-8 flex items-center gap-2">
-              <CheckCircle2 size={14} className="text-green-500" /> Advantages
+              <CheckCircle2 size={14} className="text-green-500" /> Ventajas
             </h3>
             <ul className="space-y-5">
               {pros.map((p, i) => (
@@ -156,7 +156,7 @@ const RentContent: React.FC = () => {
         <Fade delay={0.2}>
           <div>
             <h3 className="font-sans text-xs font-bold uppercase tracking-widest text-luxury-black mb-8 flex items-center gap-2">
-              <XCircle size={14} className="text-red-400" /> Considerations
+              <XCircle size={14} className="text-red-400" /> Consideraciones
             </h3>
             <ul className="space-y-5">
               {cons.map((c, i) => (
@@ -173,7 +173,7 @@ const RentContent: React.FC = () => {
       {/* Lifestyle perks */}
       <div className="mt-32">
         <Fade>
-          <h3 className="font-sans text-xs font-bold uppercase tracking-widest text-gray-400 mb-12">Luxury Rental Lifestyle</h3>
+          <h3 className="font-sans text-xs font-bold uppercase tracking-widest text-gray-400 mb-12">Estilo de Vida en Alquiler Premium</h3>
         </Fade>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {lifestylePerks.map((lp, i) => (
@@ -191,9 +191,9 @@ const RentContent: React.FC = () => {
       <Fade delay={0.2} className="mt-24">
         <div className="border-l-2 border-luxury-black pl-8 max-w-2xl">
           <p className="font-serif text-xl text-luxury-black leading-relaxed italic">
-            &ldquo;Renting is not a consolation prize. For the right person at the right moment, it is the most intelligent financial and lifestyle decision available.&rdquo;
+            &ldquo;Alquilar no es un premio de consolación. Para la persona correcta en el momento preciso, es la decisión financiera y de estilo de vida más inteligente disponible.&rdquo;
           </p>
-          <span className="font-sans text-[10px] uppercase tracking-widest text-gray-400 mt-4 inline-block">Skyline Estates Advisory</span>
+          <span className="font-sans text-[10px] uppercase tracking-widest text-gray-400 mt-4 inline-block">Skyline Estates — Asesoramiento</span>
         </div>
       </Fade>
     </section>
@@ -204,53 +204,53 @@ const RentContent: React.FC = () => {
 const NewDevContent: React.FC = () => {
   const zones = [
     {
-      name: 'Hudson Yards',
-      growth: '+38%',
-      years: '5 yr',
+      name: 'Yerba Buena',
+      growth: '+42%',
+      years: '5 años',
+      yield: '5.1%',
+      bar: 85,
+      note: 'Epicentro del crecimiento residencial premium en Tucumán. Demanda comercial y habitacional en máximos históricos.',
+    },
+    {
+      name: 'Norte de Tucumán',
+      growth: '+31%',
+      years: '5 años',
+      yield: '4.3%',
+      bar: 60,
+      note: 'Proyectos de nueva construcción en expansión. Apreciación sostenida impulsada por infraestructura y conectividad.',
+    },
+    {
+      name: 'Centro Histórico',
+      growth: '+28%',
+      years: '5 años',
+      yield: '3.8%',
+      bar: 52,
+      note: 'Recuperación y renovación urbana en marcha. Alto potencial de renta en zonas céntricas.',
+    },
+    {
+      name: 'San Pablo / Tafí Viejo',
+      growth: '+37%',
+      years: '5 años',
       yield: '4.8%',
-      bar: 78,
-      note: 'Epicenter of NYC\'s westside expansion. Commercial and residential demand at record highs.',
-    },
-    {
-      name: 'Brooklyn Heights',
-      growth: '+27%',
-      years: '5 yr',
-      yield: '4.1%',
-      bar: 57,
-      note: 'Historic charm with modern infrastructure. Steady appreciation driven by proximity to Manhattan.',
-    },
-    {
-      name: 'Long Island City',
-      growth: '+44%',
-      years: '5 yr',
-      yield: '5.2%',
-      bar: 90,
-      note: 'Post-Amazon effect continues. One of the fastest-growing residential zones in the tri-state.',
-    },
-    {
-      name: 'Lower East Side',
-      growth: '+21%',
-      years: '5 yr',
-      yield: '3.9%',
-      bar: 44,
-      note: 'Cultural revitalization well underway. High short-term rental yield potential.',
+      bar: 73,
+      note: 'Corredor de crecimiento emergente. Una de las zonas residenciales de mayor proyección del noroeste argentino.',
     },
   ];
 
   const insights = [
-    { title: 'Buy Off-Plan', text: 'Pre-construction pricing is typically 12–18% below market value at completion, creating instant embedded equity.' },
-    { title: 'Phase 1 Advantage', text: 'Early-stage investors lock in the lowest prices. As construction progresses, prices rise with each new phase release.' },
-    { title: 'Capital Appreciation', text: 'New developments in prime zones have historically outperformed resale properties by 2–3x over 10-year periods.' },
-    { title: 'Tax Incentives', text: 'Many new construction projects qualify for 421-a tax abatements, reducing effective holding costs for up to 25 years.' },
+    { title: 'Compra en Pozo', text: 'Los precios de preventa suelen estar un 12–18% por debajo del valor al completarse, generando equity inmediato.' },
+    { title: 'Ventaja de Primera Etapa', text: 'Los inversores tempranos aseguran los precios más bajos. A medida que avanza la obra, los valores suben con cada fase.' },
+    { title: 'Apreciación de Capital', text: 'Nuevos desarrollos en zonas prime históricamente superan al mercado de reventa por 2–3x en períodos de 10 años.' },
+    { title: 'Protección Dolarizada', text: 'Los inmuebles en USD ofrecen una cobertura natural contra la inflación y la volatilidad cambiaria argentina.' },
   ];
 
   return (
     <section className="py-32 px-6 md:px-24 bg-white border-t border-gray-100 relative z-10">
       {/* Header */}
       <Fade>
-        <span className="font-sans text-xs font-bold uppercase tracking-architect text-gray-400">Investment Intelligence</span>
+        <span className="font-sans text-xs font-bold uppercase tracking-architect text-gray-400">Inteligencia de Inversión</span>
         <h2 className="font-sans text-4xl md:text-5xl uppercase tracking-tight font-light text-luxury-black mt-4">
-          Where value <br /><span className="font-serif italic text-gray-400 lowercase">is heading</span>
+          Hacia dónde va <br /><span className="font-serif italic text-gray-400 lowercase">el valor</span>
         </h2>
       </Fade>
 
@@ -259,7 +259,7 @@ const NewDevContent: React.FC = () => {
         <Fade>
           <div className="flex items-center gap-3 mb-12">
             <MapPin size={14} className="text-gray-400" />
-            <span className="font-sans text-xs font-bold uppercase tracking-widest text-gray-400">5-Year Appreciation by Zone</span>
+            <span className="font-sans text-xs font-bold uppercase tracking-widest text-gray-400">Apreciación a 5 Años por Zona</span>
           </div>
         </Fade>
 
@@ -291,11 +291,11 @@ const NewDevContent: React.FC = () => {
                   <div className="flex gap-8 shrink-0">
                     <div className="text-center">
                       <p className="font-sans text-lg font-bold text-luxury-black">{z.growth}</p>
-                      <p className="font-sans text-[10px] uppercase tracking-widest text-gray-400">{z.years} growth</p>
+                      <p className="font-sans text-[10px] uppercase tracking-widest text-gray-400">{z.years} de crecimiento</p>
                     </div>
                     <div className="text-center">
                       <p className="font-sans text-lg font-bold text-luxury-black">{z.yield}</p>
-                      <p className="font-sans text-[10px] uppercase tracking-widest text-gray-400">avg yield</p>
+                      <p className="font-sans text-[10px] uppercase tracking-widest text-gray-400">renta promedio</p>
                     </div>
                   </div>
                 </div>
@@ -308,7 +308,7 @@ const NewDevContent: React.FC = () => {
       {/* Investment insights */}
       <div className="mt-32">
         <Fade>
-          <h3 className="font-sans text-xs font-bold uppercase tracking-widest text-gray-400 mb-12">Key Investment Insights</h3>
+          <h3 className="font-sans text-xs font-bold uppercase tracking-widest text-gray-400 mb-12">Claves para el Inversor</h3>
         </Fade>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {insights.map((ins, i) => (
@@ -326,10 +326,10 @@ const NewDevContent: React.FC = () => {
       <Fade delay={0.2} className="mt-24">
         <div className="bg-luxury-black text-white p-12 md:p-16 flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
           <div>
-            <p className="font-sans text-[10px] uppercase tracking-widest text-gray-400 mb-3">2025–2030 Outlook</p>
+            <p className="font-sans text-[10px] uppercase tracking-widest text-gray-400 mb-3">Perspectiva 2025–2030</p>
             <h3 className="font-serif text-3xl text-white leading-snug">
-              Prime NYC new developments are <br />
-              <span className="italic text-gray-300">projected to appreciate 30–50%</span> by 2030.
+              Los nuevos desarrollos premium en Tucumán <br />
+              <span className="italic text-gray-300">proyectan una apreciación del 30–50%</span> hacia 2030.
             </h3>
           </div>
           <motion.button
@@ -337,7 +337,7 @@ const NewDevContent: React.FC = () => {
             whileTap={{ scale: 0.97 }}
             className="shrink-0 flex items-center gap-3 px-8 py-4 bg-white text-luxury-black font-sans text-xs uppercase tracking-widest hover:bg-gray-100 transition-colors"
           >
-            <span>Get Investment Report</span>
+            <span>Obtener Informe de Inversión</span>
             <ArrowUpRight size={14} />
           </motion.button>
         </div>

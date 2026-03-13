@@ -12,6 +12,8 @@ import Home from './pages/Home';
 import PropertyDetail from './pages/PropertyDetail';
 import Agents from './pages/Agents';
 import Journal from './pages/Journal';
+import JournalPost from './pages/JournalPost';
+import PropertiesPage from './pages/PropertiesPage';
 import { ModalProvider, useModal } from './context/ModalContext';
 import Modal from './components/UI/Modal';
 import InquiryForm from './components/Forms/InquiryForm';
@@ -36,7 +38,9 @@ const AnimatedRoutes: React.FC = () => {
         <Route path="/" element={<Home />} />
         <Route path="/property/:id" element={<PropertyDetail />} />
         <Route path="/agents" element={<Agents />} />
+        <Route path="/properties" element={<PropertiesPage />} />
         <Route path="/journal" element={<Journal />} />
+        <Route path="/journal/:slug" element={<JournalPost />} />
       </Routes>
     </AnimatePresence>
   );

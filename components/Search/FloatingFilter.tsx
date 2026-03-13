@@ -34,7 +34,7 @@ const FilterOption: React.FC<FilterOptionProps> = ({ label, value, options, onCh
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const displayValue = value === 'all' ? `Any ${label.split(' ')[0]}` : value;
+  const anyLabel = value === 'all' ? `Cualquier ${label.split(' ')[0]}` : value;
 
   return (
     <div
@@ -48,7 +48,7 @@ const FilterOption: React.FC<FilterOptionProps> = ({ label, value, options, onCh
             {label}
           </span>
           <span className="font-serif text-xl md:text-2xl text-luxury-black block">
-            {displayValue}
+            {anyLabel}
           </span>
         </div>
         <motion.div
@@ -78,7 +78,7 @@ const FilterOption: React.FC<FilterOptionProps> = ({ label, value, options, onCh
               }}
               className={`w-full text-left px-6 py-3 font-serif text-base hover:bg-gray-50 transition-colors ${value === 'all' ? 'text-luxury-black bg-gray-50/50' : 'text-gray-500'}`}
             >
-              Any {label.split(' ')[0]}
+              Cualquier {label.split(' ')[0]}
             </button>
             {options.map((opt) => (
               <button
@@ -116,9 +116,9 @@ const FloatingFilter: React.FC<FloatingFilterProps> = ({ onSearch }) => {
   // 'Penthouse' is its own section — excluded from the Type dropdown
   const types = (Array.from(new Set(PROPERTIES.map(p => p.type))) as string[]).filter(t => t !== 'Penthouse');
   const priceRanges = [
-    { label: 'Under $10M', value: 'under-10' },
+    { label: 'Menos de $10M', value: 'under-10' },
     { label: '$10M – $30M', value: '10-30' },
-    { label: 'Above $30M', value: 'above-30' },
+    { label: 'Más de $30M', value: 'above-30' },
   ];
   const priceLabels = priceRanges.map(p => p.label);
   // Map label ↔ value for URL param encoding
@@ -134,19 +134,19 @@ const FloatingFilter: React.FC<FloatingFilterProps> = ({ onSearch }) => {
     >
       <div className="bg-white shadow-2xl flex flex-col md:flex-row items-stretch border-t border-gray-100">
         <FilterOption
-          label="Location"
+          label="Ubicación"
           value={filters.location}
           options={locations}
           onChange={(val) => setFilters(prev => ({ ...prev, location: val }))}
         />
         <FilterOption
-          label="Property Type"
+          label="Tipo de Inmueble"
           value={filters.type}
           options={types}
           onChange={(val) => setFilters(prev => ({ ...prev, type: val }))}
         />
         <FilterOption
-          label="Price Range"
+          label="Precio"
           value={filters.price}
           options={priceLabels}
           onChange={(val) => setFilters(prev => ({ ...prev, price: val }))}
@@ -164,9 +164,9 @@ const FloatingFilter: React.FC<FloatingFilterProps> = ({ onSearch }) => {
           {/* Revealed Options - slide in from right on hover */}
           <div className="flex flex-col w-full translate-x-full opacity-0 group-hover/submit:translate-x-0 group-hover/submit:opacity-100 transition-all duration-500 ease-[cubic-bezier(0.76,0,0.24,1)]">
             {([
-              { label: 'Buy', intent: 'sale' },
-              { label: 'Rent', intent: 'rent' },
-              { label: 'New Dev.', intent: 'new-developments' },
+              { label: 'Comprar', intent: 'sale' },
+              { label: 'Alquilar', intent: 'rent' },
+              { label: 'Nuevos Des.', intent: 'new-developments' },
             ] as { label: string; intent: string }[]).map(({ label, intent }) => (
               <button
                 key={label}

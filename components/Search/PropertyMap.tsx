@@ -22,14 +22,13 @@ interface PropertyMapProps {
 }
 
 const PropertyMap: React.FC<PropertyMapProps> = ({ properties }) => {
-    // Center initially on roughly the Atlantic to show all points optionally, or just NY.
-    // Let's center on NY for now as default.
-    const position: [number, number] = [30, -10]; // Global-ish view
+    // Center initially on Argentina / Cono Sur
+    const position: [number, number] = [-38.4161, -63.6167];
 
     return (
         <MapContainer
             center={position}
-            zoom={2}
+            zoom={4}
             scrollWheelZoom={true}
             style={{ height: "600px", width: "100%", zIndex: 0 }}
             className="grayscale invert hover:invert-0 transition-all duration-700" // Optional funky CSS effects for "dark mode" if tiles aren't enough
@@ -47,7 +46,7 @@ const PropertyMap: React.FC<PropertyMapProps> = ({ properties }) => {
                             <h3 className="font-sans text-xs font-bold uppercase tracking-widest mb-1">{property.title}</h3>
                             <p className="font-serif text-xs text-gray-500 mb-2">{property.location}</p>
                             <Link to={`/property/${property.id}`} className="block text-center bg-black text-white text-[10px] uppercase font-bold py-2 tracking-widest hover:bg-gray-800 transition-colors">
-                                View Residence
+                                Ver Residencia
                             </Link>
                         </div>
                     </Popup>

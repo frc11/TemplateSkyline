@@ -126,7 +126,7 @@ const Hero: React.FC<HeroProps> = ({ onExplore }) => {
 
   // Human-readable price label
   const priceLabel = currentProp.status === 'rent' ? currentProp.price : currentProp.price;
-  const statusLabel = currentProp.isNewDevelopment ? 'New Development' : currentProp.status === 'rent' ? 'For Rent' : 'For Sale';
+  const statusLabel = currentProp.isNewDevelopment ? 'Nuevo Desarrollo' : currentProp.status === 'rent' ? 'Alquiler' : 'Venta';
 
   return (
     <section
@@ -198,7 +198,7 @@ const Hero: React.FC<HeroProps> = ({ onExplore }) => {
             className="absolute bottom-[130px] z-10 flex items-center gap-2 pointer-events-none"
             style={{ left: 'calc(50% + 70px)' }}
           >
-            <span className="font-sans text-[10px] uppercase tracking-[0.25em] text-white/35">Browse with</span>
+            <span className="font-sans text-[10px] uppercase tracking-[0.25em] text-white/35">Navegar con</span>
             <span className="font-sans text-[10px] text-white/50 border border-white/25 px-2 py-1 leading-none">←</span>
             <span className="font-sans text-[10px] text-white/50 border border-white/25 px-2 py-1 leading-none">→</span>
           </motion.div>
@@ -243,7 +243,7 @@ const Hero: React.FC<HeroProps> = ({ onExplore }) => {
       >
         <div className="relative z-10 flex flex-col items-center">
           <span className="uppercase tracking-widest text-xs font-bold group-hover:tracking-[0.3em] transition-all duration-300">
-            Explore
+            Explorar
           </span>
         </div>
         <div className="absolute inset-0 bg-gray-100 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
