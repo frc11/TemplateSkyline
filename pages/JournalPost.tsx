@@ -38,12 +38,12 @@ const JournalPost: React.FC = () => {
                     animate={{ scale: 1 }}
                     transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/10" />
 
                 {/* Back link */}
                 <Link
                     to="/journal"
-                    className="absolute top-8 left-8 flex items-center gap-2 text-white/80 hover:text-white transition-colors group"
+                    className="absolute top-8 left-8 flex items-center gap-2 text-white/90 hover:text-white transition-all group bg-black/20 backdrop-blur-md px-4 py-2 rounded-full border border-white/10"
                 >
                     <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
                     <span className="font-sans text-[10px] uppercase tracking-[0.25em] font-bold">Revista</span>
@@ -56,15 +56,15 @@ const JournalPost: React.FC = () => {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.9, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
                     >
-                        <div className="flex items-center gap-6 mb-6">
-                            <span className="font-sans text-[10px] uppercase tracking-[0.3em] font-bold text-white/70 border border-white/30 px-3 py-1">
+                        <div className="flex flex-wrap items-center gap-6 mb-8">
+                            <span className="font-sans text-[10px] uppercase tracking-[0.3em] font-bold text-white bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-1.5">
                                 {post.category}
                             </span>
-                            <span className="font-sans text-[10px] uppercase tracking-widest text-white/50 flex items-center gap-2">
+                            <span className="font-sans text-[10px] uppercase tracking-widest text-white/90 flex items-center gap-2 drop-shadow-sm">
                                 <Clock size={10} />
                                 {post.readTime}
                             </span>
-                            <span className="font-sans text-[10px] uppercase tracking-widest text-white/50">{post.date}</span>
+                            <span className="font-sans text-[10px] uppercase tracking-widest text-white/90 drop-shadow-sm">{post.date}</span>
                         </div>
                         <h1 className="font-serif text-4xl md:text-6xl lg:text-7xl text-white leading-tight max-w-4xl">
                             {post.title}

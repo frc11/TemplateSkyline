@@ -1,9 +1,10 @@
 import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { ArrowUpRight, ChevronDown, Filter, X } from 'lucide-react';
+import { ArrowUpRight, ChevronDown, Filter, X, Map as MapIcon, Grid as GridIcon } from 'lucide-react';
 import { PROPERTIES, PropertyData } from '../data/properties';
 import Footer from '../components/Layout/Footer';
+import PropertyMap from '../components/Search/PropertyMap';
 
 /* ─── Property Card ────────────────────────────── */
 const PropertyCard: React.FC<{ property: PropertyData; index: number }> = ({ property, index }) => (
@@ -138,6 +139,7 @@ const PRICE_RANGES = [
 
 /* ─── Page ─────────────────────────────────────── */
 const PropertiesPage: React.FC = () => {
+    const [viewMode, setViewMode] = useState<'grid' | 'map'>('grid');
     const [filters, setFilters] = useState({ location: 'all', type: 'all', status: 'all', price: 'all' });
 
     const locations = useMemo(() => Array.from(new Set(PROPERTIES.map(p => p.location))), []);
@@ -214,33 +216,71 @@ const PropertiesPage: React.FC = () => {
                             </button>
                         )}
                     </div>
+                    
+                    <div className="flex-1" />
+
+                    {/* View Toggle */}
+                    <div className="flex items-center bg-gray-50 p-1 rounded-sm border border-gray-100">
+                        <button
+                            onClick={() => setViewMode('grid')}
+                            aria-label="Switch to grid view"
+                            className={`flex items-center gap-2 px-4 py-2 rounded-sm text-[10px] uppercase tracking-widest font-bold transition-all ${viewMode === 'grid' ? 'bg-white text-luxury-black shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
+                        >
+                            <GridIcon size={14} /><span>Lista</span>
+                        </button>
+                        <button
+                            onClick={() => setViewMode('map')}
+                            aria-label="Switch to map view"
+                            className={`flex items-center gap-2 px-4 py-2 rounded-sm text-[10px] uppercase tracking-widest font-bold transition-all ${viewMode === 'map' ? 'bg-white text-luxury-black shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
+                        >
+                            <MapIcon size={14} /><span>Mapa</span>
+                        </button>
+                    </div>
                 </div>
 
-                {/* Grid */}
-                <AnimatePresence mode="popLayout">
-                    {filtered.length > 0 ? (
-                        <motion.div
-                            key="grid"
-                            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-20"
-                        >
-                            {filtered.map((p, i) => (
-                                <PropertyCard key={p.id} property={p} index={i} />
-                            ))}
-                        </motion.div>
+                {/* Content Area */}
+                <AnimatePresence mode="wait">
+                    {viewMode === 'grid' ? (
+                        filtered.length > 0 ? (
+                            <motion.div
+                                key="grid"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-20"
+                            >
+                                {filtered.map((p, i) => (
+                                    <PropertyCard key={p.id} property={p} index={i} />
+                                ))}
+                            </motion.div>
+                        ) : (
+                            <motion.div
+                                key="empty"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                className="text-center py-32"
+                            >
+                                <p className="font-serif text-2xl text-gray-400 italic mb-4">Ningún inmueble coincide con los filtros</p>
+                                <button
+                                    onClick={() => setFilters({ location: 'all', type: 'all', status: 'all', price: 'all' })}
+                                    className="font-sans text-xs uppercase tracking-widest border-b border-gray-400 pb-0.5 hover:border-black transition-colors"
+                                >
+                                    Limpiar filtros
+                                </button>
+                            </motion.div>
+                        )
                     ) : (
+                        /* Map View */
                         <motion.div
-                            key="empty"
+                            key="map"
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
-                            className="text-center py-32"
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.4 }}
+                            className="w-full h-[70vh] min-h-[500px] bg-luxury-black relative rounded-sm overflow-hidden shadow-2xl border border-gray-100 z-0"
                         >
-                            <p className="font-serif text-2xl text-gray-400 italic mb-4">Ningún inmueble coincide con los filtros</p>
-                            <button
-                                onClick={() => setFilters({ location: 'all', type: 'all', status: 'all', price: 'all' })}
-                                className="font-sans text-xs uppercase tracking-widest border-b border-gray-400 pb-0.5 hover:border-black transition-colors"
-                            >
-                                Limpiar filtros
-                            </button>
+                            <PropertyMap properties={filtered} />
                         </motion.div>
                     )}
                 </AnimatePresence>

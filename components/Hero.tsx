@@ -196,7 +196,7 @@ const Hero: React.FC<HeroProps> = ({ onExplore }) => {
             exit={{ opacity: 0, x: 16, transition: { duration: 0.5, ease: 'easeIn' } }}
             transition={{ duration: 0.8, delay: 2.0 }}
             className="absolute bottom-[130px] z-10 flex items-center gap-2 pointer-events-none"
-            style={{ left: 'calc(50% + 70px)' }}
+            style={{ left: 'calc(56%)' }}
           >
             <span className="font-sans text-[10px] uppercase tracking-[0.25em] text-white/35">Navegar con</span>
             <span className="font-sans text-[10px] text-white/50 border border-white/25 px-2 py-1 leading-none">←</span>

@@ -17,7 +17,7 @@ export const JOURNAL_POSTS: JournalPost[] = [
     /* ─── Architecture ─── */
     {
         id: '1',
-        category: 'Architectura',
+        category: 'Arquitectura',
         title: 'El Regreso del Brutalismo en el Lujo Moderno',
         date: '12 de octubre de 2024',
         readTime: '6 min de lectura',
